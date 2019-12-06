@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.borderStyle = .roundedRect
         textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         
         return textfield
     }()
@@ -37,6 +38,7 @@ class ViewController: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.borderStyle = .roundedRect
         textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         
         return textfield
     }()
@@ -49,6 +51,7 @@ class ViewController: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.borderStyle = .roundedRect
         textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         
         return textfield
     }()
@@ -66,6 +69,23 @@ class ViewController: UIViewController {
         return button
     }()
     
+    @objc func handleInputChange() {
+        let isEmailValid = !emailTextField.text!.isEmpty
+        let isPasswordValid = !passwordTextField.text!.isEmpty
+        let isUsernameValid = !usernameTextField.text!.isEmpty
+        
+        // Disable the button and add disabled-blue background color
+        guard isEmailValid && isPasswordValid && isUsernameValid else {
+            signupButton.isEnabled = false
+            signupButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+            return
+        }
+        
+        // Enable the button and add bolder blue background
+        signupButton.isEnabled = true
+        signupButton.backgroundColor = .blue
+    }
+    
     @objc func handleSignup() {
         guard let email = emailTextField.text, !email.isEmpty else { return }
         guard let username = usernameTextField.text, !username.isEmpty else { return }
@@ -73,7 +93,7 @@ class ViewController: UIViewController {
         
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if let err = error {
-                print("Error in signing up user: ", err)
+                self.handleError(error: err, title: "Sign up failed")
                 return
             }
             
@@ -90,6 +110,14 @@ class ViewController: UIViewController {
     
         // Init input text fields
         setInputFields()
+    }
+    
+    func handleError(error: Error, title: String) {
+        print("ERROR \(error.localizedDescription)")
+        let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     fileprivate func setInputFields() {
