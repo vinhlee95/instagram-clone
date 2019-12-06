@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ViewController: UIViewController {
     
@@ -59,8 +60,26 @@ class ViewController: UIViewController {
         button.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 4
+        
+        button.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
+        
         return button
     }()
+    
+    @objc func handleSignup() {
+        guard let email = emailTextField.text, !email.isEmpty else { return }
+        guard let username = usernameTextField.text, !username.isEmpty else { return }
+        guard let password = passwordTextField.text, !password.isEmpty else { return }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+            if let err = error {
+                print("Error in signing up user: ", err)
+                return
+            }
+            
+            print("Sign up success: ", user ?? "")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
