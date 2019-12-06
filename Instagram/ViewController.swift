@@ -9,15 +9,36 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // Plus button
     let plusPhotoButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "plush_photo"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleUploadProfileImage), for: .touchUpInside)
+        
         return button
     }()
+    
+    @objc func handleUploadProfileImage() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        imagePickerController.mediaTypes = ["public.image"]
+        
+        self.present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            plusPhotoButton.setImage(originalImage, for: .normal)
+        } else if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            plusPhotoButton.setImage(editedImage, for: .normal)
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
     
     // User name text field
     let usernameTextField: UITextField = {
@@ -83,7 +104,7 @@ class ViewController: UIViewController {
         
         // Enable the button and add bolder blue background
         signupButton.isEnabled = true
-        signupButton.backgroundColor = .blue
+        signupButton.backgroundColor = UIColor.rgb(red: 77, green: 166, blue: 255)
     }
     
     @objc func handleSignup() {
@@ -91,13 +112,16 @@ class ViewController: UIViewController {
         guard let username = usernameTextField.text, !username.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
         
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
             if let err = error {
                 self.handleError(error: err, title: "Sign up failed")
                 return
             }
             
-            print("Sign up success: ", user ?? "")
+            let user = authResult!.user
+            print("User created: \(user.uid)")
+            
+            self.saveUserData(user)
         }
     }
 
@@ -135,5 +159,19 @@ class ViewController: UIViewController {
         
         // Add constraints
         stackView.anchor(top: plusPhotoButton.bottomAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 40, paddingBottom: 0, paddingLeft: 20, paddingRight: 20, width: 0, height: 200)
+    }
+    
+    func saveUserData(_ user: User) {
+        let values = ["username": usernameTextField.text]
+        Database.database().reference().child("users").child(user.uid).setValue(values)
+        {
+            (error, erf) in
+            if let err = error {
+                print("Fail to save user data", err)
+                return
+            }
+            
+            print("Saved user data to the database")
+        }
     }
 }
