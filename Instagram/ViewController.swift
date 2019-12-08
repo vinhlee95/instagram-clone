@@ -9,7 +9,18 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension UIViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @objc func handleUploadProfileImage() {
+       let imagePickerController = UIImagePickerController()
+       imagePickerController.delegate = self
+       imagePickerController.allowsEditing = true
+       imagePickerController.mediaTypes = ["public.image"]
+       
+       self.present(imagePickerController, animated: true, completion: nil)
+   }
+}
+
+class ViewController: UIViewController {
     
     // Plus button
     let plusPhotoButton: UIButton = {
@@ -21,21 +32,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return button
     }()
     
-    @objc func handleUploadProfileImage() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = true
-        imagePickerController.mediaTypes = ["public.image"]
-        
-        self.present(imagePickerController, animated: true, completion: nil)
-    }
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             plusPhotoButton.setImage(originalImage, for: .normal)
         } else if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             plusPhotoButton.setImage(editedImage, for: .normal)
         }
+        
+        // Add styling for the image button
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width/2
+        plusPhotoButton.layer.masksToBounds = true
         
         dismiss(animated: true, completion: nil)
     }
@@ -111,17 +117,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         guard let email = emailTextField.text, !email.isEmpty else { return }
         guard let username = usernameTextField.text, !username.isEmpty else { return }
         guard let password = passwordTextField.text, !password.isEmpty else { return }
+        guard let profileImage = plusPhotoButton.imageView?.image else {return}
+        guard let uploadData = profileImage.jpegData(compressionQuality: 0.3) else {return}
         
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
             if let err = error {
                 self.handleError(error: err, title: "Sign up failed")
                 return
             }
-            
+
             let user = authResult!.user
             print("User created: \(user.uid)")
             
-            self.saveUserData(user)
+            // Upload profile image
+            self.uploadImage(uploadData) { (profileImageUrl) in
+                self.saveUserData(user, profileImageUrl)
+            }
         }
     }
 
@@ -129,7 +140,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         view.addSubview(plusPhotoButton)
         
-        plusPhotoButton.anchor(top: view.topAnchor, bottom: nil, left: nil, right: nil, paddingTop: 40, paddingBottom: 40, paddingLeft: 0, paddingRight: 0, width: 140, height: 140)
+        plusPhotoButton.anchor(top: view.topAnchor, bottom: nil, left: nil, right: nil, paddingTop: 40, paddingBottom: 60, paddingLeft: 0, paddingRight: 0, width: 140, height: 140)
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     
         // Init input text fields
@@ -161,8 +172,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         stackView.anchor(top: plusPhotoButton.bottomAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 40, paddingBottom: 0, paddingLeft: 20, paddingRight: 20, width: 0, height: 200)
     }
     
-    func saveUserData(_ user: User) {
-        let values = ["username": usernameTextField.text]
+    func uploadImage(_ imageData: Data, completion: @escaping (_ uploadedUrl: String) -> Void) {
+        let profileImageName = NSUUID().uuidString
+        
+        Storage.storage().reference().child("profile_images").child(profileImageName).putData(imageData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                print("Error in uploading user profile image", error)
+                return
+            }
+            
+            let imagesRef = Storage.storage().reference().child("profile_images")
+            let spaceRef = imagesRef.child("/\(profileImageName)")
+            
+            spaceRef.downloadURL { (url, error) in
+                if let error = error {
+                    print("Error in getting profile image download url", error)
+                }
+                
+                print("Upload profile picture success", url)
+                guard let profileImageUrl = url?.absoluteString else {return}
+                
+                completion(profileImageUrl)
+            }
+        }
+    }
+    
+    func saveUserData(_ user: User, _ profileImageUrl: String) {
+        let values = ["username": usernameTextField.text, "avatar_url": profileImageUrl] as [String : Any]
+        
         Database.database().reference().child("users").child(user.uid).setValue(values)
         {
             (error, erf) in
