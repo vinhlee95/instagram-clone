@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import Firebase
 
-class UserProfileController: UIViewController {
+class UserProfileController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        collectionView.backgroundColor = .white
+        
+        let currentUserId = Auth.auth().currentUser?.uid
+        navigationItem.title = currentUserId
     }
 }
