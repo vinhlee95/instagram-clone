@@ -9,13 +9,14 @@
 import UIKit
 import Firebase
 
-class UserProfileController: UICollectionViewController {
+class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         
         guard let userId = Auth.auth().currentUser?.uid else {return}
         fetchUser(userId)
+        collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
     }
     
     fileprivate func fetchUser(_ userId: String) {
@@ -29,5 +30,16 @@ class UserProfileController: UICollectionViewController {
             let username = user["username"] as! String
             self.navigationItem.title = username
         }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath)
+        header.backgroundColor = .green
+        
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 60)
     }
 }

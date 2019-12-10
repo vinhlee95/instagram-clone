@@ -91,8 +91,8 @@
             filePath = "Instagram/UserProfileController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "fetchUser(_:)"
             landmarkType = "7">
          </BreakpointContent>
