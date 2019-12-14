@@ -10,14 +10,29 @@ import UIKit
 import Firebase
 
 class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    //
+    // Variables
+    //
+    var userService = UserService()
     var user: User?
     
+    //
+    // Override methods
+    //
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        fetchUser(userId)
+        userService.fetchUser(userId) { (user, error) in
+            self.user = user
+            guard let username = user?.name else {return}
+            
+            self.navigationItem.title = username
+            self.collectionView?.reloadData()
+        }
+        
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
     }
     
@@ -28,22 +43,10 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         return header
     }
     
+    //
+    // Internal methods
+    //
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
-    }
-    
-    fileprivate func fetchUser(_ userId: String) {
-        Database.database().reference().child("users").child(userId).observeSingleEvent(of: .value) { (snapshot, error) in
-            if let error = error {
-                print("Error in getting user data", error)
-            }
-            
-            guard let fetchedUser = snapshot.value as? [String: String] else {return}
-            self.user = User(name: fetchedUser["username"] ?? "", profileImageUrl: fetchedUser["avatar_url"] ?? "")
-            
-            let username = self.user?.name
-            self.navigationItem.title = username
-            self.collectionView?.reloadData()
-        }
     }
 }

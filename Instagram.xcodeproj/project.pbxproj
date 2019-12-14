@@ -10,6 +10,7 @@
 		03DF99DCB49675A8019BF54C /* Pods_Instagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DD1E8E394625BCF3BFBC09 /* Pods_Instagram.framework */; };
 		1B06B655239D898500EC4AEB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B06B654239D898500EC4AEB /* MainTabBarController.swift */; };
 		1B7C92B623A4BD080047349B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B523A4BD080047349B /* User.swift */; };
+		1B7C92BA23A50DE30047349B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B923A50DE30047349B /* UserService.swift */; };
 		1B8A6A922399773800BE4617 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B8A6A912399773800BE4617 /* GoogleService-Info.plist */; };
 		1B8CCBB5239EFA7700D13F81 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8CCBB4239EFA7700D13F81 /* UserProfileController.swift */; };
 		1B8CCBB823A0448800D13F81 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8CCBB723A0448800D13F81 /* UserProfileHeader.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		1B06B654239D898500EC4AEB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1B7C92B523A4BD080047349B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1B7C92B923A50DE30047349B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		1B8A6A912399773800BE4617 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1B8CCBB4239EFA7700D13F81 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		1B8CCBB723A0448800D13F81 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
@@ -60,6 +62,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		1B7C92B723A50D8F0047349B /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1B8CCBB623A0446600D13F81 /* UserProfile */,
+				1B06B654239D898500EC4AEB /* MainTabBarController.swift */,
+				1BBD4CC6238127A4006FAEAD /* ViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		1B7C92B823A50DC50047349B /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				1B7C92B923A50DE30047349B /* UserService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		1B8CCBB623A0446600D13F81 /* UserProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,13 +110,12 @@
 		1BBD4CC1238127A4006FAEAD /* Instagram */ = {
 			isa = PBXGroup;
 			children = (
+				1B7C92B823A50DC50047349B /* Networking */,
+				1B7C92B723A50D8F0047349B /* View Controllers */,
 				1B7C92B423A4BB030047349B /* Model */,
-				1B8CCBB623A0446600D13F81 /* UserProfile */,
 				1BBD4CD62381CD5F006FAEAD /* Utils */,
 				1BBD4CC2238127A4006FAEAD /* AppDelegate.swift */,
 				1BBD4CC4238127A4006FAEAD /* SceneDelegate.swift */,
-				1BBD4CC6238127A4006FAEAD /* ViewController.swift */,
-				1B06B654239D898500EC4AEB /* MainTabBarController.swift */,
 				1BBD4CCB238127A4006FAEAD /* Assets.xcassets */,
 				1BBD4CCD238127A4006FAEAD /* LaunchScreen.storyboard */,
 				1BBD4CD0238127A4006FAEAD /* Info.plist */,
@@ -247,6 +266,7 @@
 			files = (
 				1BBD4CC7238127A4006FAEAD /* ViewController.swift in Sources */,
 				1B8CCBB823A0448800D13F81 /* UserProfileHeader.swift in Sources */,
+				1B7C92BA23A50DE30047349B /* UserService.swift in Sources */,
 				1BBD4CC3238127A4006FAEAD /* AppDelegate.swift in Sources */,
 				1B8CCBB5239EFA7700D13F81 /* UserProfileController.swift in Sources */,
 				1B7C92B623A4BD080047349B /* User.swift in Sources */,
