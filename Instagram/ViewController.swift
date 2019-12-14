@@ -198,10 +198,10 @@ class ViewController: UIViewController {
         }
     }
     
-    func saveUserData(_ user: User, _ profileImageUrl: String) {
-        let values = ["username": usernameTextField.text, "avatar_url": profileImageUrl] as [String : Any]
+    func saveUserData(_ user: Any, _ profileImageUrl: String) {
+        let values = ["username": usernameTextField.text ?? "", "avatar_url": profileImageUrl] as [String : Any]
         
-        Database.database().reference().child("users").child(user.uid).setValue(values)
+        Database.database().reference().child("users").child((user as AnyObject).uid).setValue(values)
         {
             (error, erf) in
             if let err = error {
