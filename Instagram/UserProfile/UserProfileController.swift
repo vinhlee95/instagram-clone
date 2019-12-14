@@ -16,7 +16,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         guard let userId = Auth.auth().currentUser?.uid else {return}
         fetchUser(userId)
-        collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
+        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
     }
     
     fileprivate func fetchUser(_ userId: String) {
@@ -26,7 +26,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             }
             
             guard let user = snapshot.value as? [String: Any] else {return}
-            print(user)
+            // print(user)
             let username = user["username"] as! String
             self.navigationItem.title = username
         }
@@ -34,12 +34,11 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath)
-        header.backgroundColor = .green
         
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 60)
+        return CGSize(width: view.frame.width, height: 200)
     }
 }
