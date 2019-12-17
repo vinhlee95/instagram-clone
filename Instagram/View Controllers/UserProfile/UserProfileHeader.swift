@@ -46,6 +46,7 @@ class UserProfileHeader: UICollectionViewCell {
         label.text = "11\nposts"
         label.numberOfLines = 0
         label.textAlignment = NSTextAlignment.center
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     
@@ -54,6 +55,7 @@ class UserProfileHeader: UICollectionViewCell {
         label.text = "11\nposts"
         label.numberOfLines = 0
         label.textAlignment = NSTextAlignment.center
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     
@@ -62,7 +64,19 @@ class UserProfileHeader: UICollectionViewCell {
         label.text = "11\nposts"
         label.numberOfLines = 0
         label.textAlignment = NSTextAlignment.center
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
+    }()
+    
+    let editProfileButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Edit profile", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 4
+        return button
     }()
     
     var user: User? {
@@ -81,6 +95,7 @@ class UserProfileHeader: UICollectionViewCell {
         renderBottomToolbar()
         renderUsernameLabel()
         renderInfoLabelGroup()
+        renderEditProfileButton()
     }
     
     required init?(coder: NSCoder) {
@@ -98,14 +113,19 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func renderUsernameLabel() {
         addSubview(usernameLabel)
-        usernameLabel.anchor(top: profileImageView.bottomAnchor, bottom: gridButton.topAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: nil)
+        usernameLabel.anchor(top: profileImageView.bottomAnchor, bottom: gridButton.topAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 0, width: nil, height: nil)
     }
     
     fileprivate func renderInfoLabelGroup() {
         let stackView = UIStackView(arrangedSubviews: [postLabel, followerLabel, followingLabel])
         stackView.distribution = .fillEqually
         addSubview(stackView)
-        stackView.anchor(top: topAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 12, paddingBottom: 0, paddingLeft: 12, paddingRight: 0, width: nil, height: 50)
+        stackView.anchor(top: topAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 12, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 50)
+    }
+    
+    fileprivate func renderEditProfileButton() {
+        addSubview(editProfileButton)
+        editProfileButton.anchor(top: postLabel.bottomAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 40)
     }
     
     fileprivate func setProfileImage() {
