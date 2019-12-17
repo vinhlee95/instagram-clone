@@ -43,3 +43,15 @@ extension UIView {
         }
     }
 }
+
+extension UILabel {
+    func addAttributeText(primaryText: String, secondaryText: String) {
+        let attributedText = NSMutableAttributedString(string: "\(primaryText)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+                
+        attributedText.append(NSAttributedString(string: secondaryText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+    
+        self.attributedText = attributedText
+        self.numberOfLines = 0
+        self.textAlignment = NSTextAlignment.center
+    }
+}

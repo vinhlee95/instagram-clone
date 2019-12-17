@@ -43,28 +43,19 @@ class UserProfileHeader: UICollectionViewCell {
     
     let postLabel: UILabel = {
         let label = UILabel()
-        label.text = "11\nposts"
-        label.numberOfLines = 0
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.addAttributeText(primaryText: "11", secondaryText: "posts")
         return label
     }()
     
     let followerLabel: UILabel = {
         let label = UILabel()
-        label.text = "11\nposts"
-        label.numberOfLines = 0
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.addAttributeText(primaryText: "1000", secondaryText: "followers")
         return label
     }()
     
     let followingLabel: UILabel = {
         let label = UILabel()
-        label.text = "11\nposts"
-        label.numberOfLines = 0
-        label.textAlignment = NSTextAlignment.center
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.addAttributeText(primaryText: "1M", secondaryText: "following")
         return label
     }()
     
