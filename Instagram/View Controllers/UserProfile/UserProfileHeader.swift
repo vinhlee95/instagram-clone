@@ -95,11 +95,20 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func renderBottomToolbar() {
         let stackView = UIStackView(arrangedSubviews: [gridButton, listButton, bookmarkButton])
-            
         stackView.distribution = .fillEqually
         addSubview(stackView)
 
         stackView.anchor(top: nil, bottom: self.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: 50)
+        
+        let borderTopView = UIView()
+        borderTopView.backgroundColor = UIColor.lightGray
+        addSubview(borderTopView)
+        borderTopView.anchor(top: stackView.topAnchor, bottom: nil, left: stackView.leftAnchor, right: stackView.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: 0.5)
+        
+        let borderBottomView = UIView()
+        borderBottomView.backgroundColor = UIColor.lightGray
+        addSubview(borderBottomView)
+        borderBottomView.anchor(top: stackView.bottomAnchor, bottom: nil, left: stackView.leftAnchor, right: stackView.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: 0.5)
     }
     
     fileprivate func renderUsernameLabel() {
