@@ -125,7 +125,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func renderEditProfileButton() {
         addSubview(editProfileButton)
-        editProfileButton.anchor(top: postLabel.bottomAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 40)
+        editProfileButton.anchor(top: postLabel.bottomAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 35)
     }
     
     fileprivate func setProfileImage() {
