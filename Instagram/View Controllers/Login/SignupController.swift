@@ -20,7 +20,7 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
    }
 }
 
-class ViewController: UIViewController {
+class SignupController: UIViewController {
     
     // Plus button
     let plusPhotoButton: UIButton = {
