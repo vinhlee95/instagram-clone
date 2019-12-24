@@ -7,10 +7,21 @@
 //
 
 import UIKit
+import Firebase
 
 class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Check if user has already logged in
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let loginController = LoginController()
+                self.present(loginController, animated: true, completion: nil)
+            }
+            
+            return
+        }
         
         // Define collection flow layout
         let layout = UICollectionViewFlowLayout()
