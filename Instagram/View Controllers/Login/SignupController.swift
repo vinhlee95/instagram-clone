@@ -154,7 +154,7 @@ class SignupController: UIViewController {
     
     @objc func onToLoginButtonClick() {
         let loginController = LoginController()
-        navigationController?.pushViewController(loginController, animated: true)
+        navigationController?.popViewController(animated: true)
     }
 
     override func viewDidLoad() {
