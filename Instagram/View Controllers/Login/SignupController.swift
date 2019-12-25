@@ -138,7 +138,15 @@ class SignupController: UIViewController {
     
     let toLoginButton: UIButton = {
         let toLoginButton = UIButton(type: .system)
-        toLoginButton.setTitle("Already have an account? Log in", for: .normal)
+        let attributedTitle = NSMutableAttributedString(string: "Already had an account? ", attributes: [
+            .font: UIFont.systemFont(ofSize: 14),
+            .foregroundColor: UIColor.lightGray
+        ])
+        attributedTitle.append(NSAttributedString(string: "Login", attributes: [
+            .font: UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: UIColor.rgb(red: 77, green: 166, blue: 255)
+        ]))
+        toLoginButton.setAttributedTitle(attributedTitle, for: .normal)
         toLoginButton.addTarget(self, action: #selector(onToLoginButtonClick), for: .touchUpInside)
         
         return toLoginButton
@@ -159,6 +167,10 @@ class SignupController: UIViewController {
     
         // Init input text fields
         setInputFields()
+        
+        // Render to login view button
+        view.addSubview(toLoginButton)
+        toLoginButton.anchor(top: nil, bottom: view.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingBottom: -20, paddingLeft: 20, paddingRight: 20, width: nil, height: nil)
     }
     
     func handleError(error: Error, title: String) {
@@ -172,7 +184,7 @@ class SignupController: UIViewController {
     fileprivate func setInputFields() {
         // create a stack view
         let stackView = UIStackView(arrangedSubviews: [
-            usernameTextField, emailTextField, passwordTextField, signupButton, toLoginButton
+            usernameTextField, emailTextField, passwordTextField, signupButton
         ])
     
         stackView.distribution = .fillEqually
@@ -183,7 +195,7 @@ class SignupController: UIViewController {
         view.addSubview(stackView)
         
         // Add constraints
-        stackView.anchor(top: plusPhotoButton.bottomAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 40, paddingBottom: 0, paddingLeft: 20, paddingRight: 20, width: nil, height: 200)
+        stackView.anchor(top: plusPhotoButton.bottomAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 40, paddingBottom: 0, paddingLeft: 20, paddingRight: 20, width: nil, height: 160)
     }
     
     func uploadImage(_ imageData: Data, completion: @escaping (_ uploadedUrl: String) -> Void) {
