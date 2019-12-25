@@ -26,9 +26,51 @@ class LoginController: UIViewController {
         return header
     }()
     
+    // Email text field
+    let emailTextField: UITextField = {
+        let textfield = UITextField()
+        textfield.placeholder = "Enter your email"
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.borderStyle = .roundedRect
+        textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
+//        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
+        
+        return textfield
+    }()
+    
+    // Password text field
+    let passwordTextField: UITextField = {
+        let textfield = UITextField()
+        textfield.placeholder = "Password"
+        textfield.isSecureTextEntry = true
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.borderStyle = .roundedRect
+        textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
+//        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
+        
+        return textfield
+    }()
+    
+    // Sign up button
+    let loginButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Login", for: .normal)
+        button.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 4
+        
+//        button.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
+        
+        return button
+    }()
+    
     let signupButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Don't have an account? Sign up", for: .normal)
+        
+        let attributedTitle = NSMutableAttributedString(string: "Don't have an account? ", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray])
+        attributedTitle.append(NSAttributedString(string: "Sign up", attributes: [.font: UIFont.boldSystemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 77, green: 166, blue: 255)]))
+       
+        button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(onSignupClick), for: .touchUpInside)
         return button
     }()
@@ -47,6 +89,7 @@ class LoginController: UIViewController {
         // Render UI elements
         renderSignupButton()
         renderHeader()
+        renderLoginForm()
     }
     
     //
@@ -71,5 +114,18 @@ class LoginController: UIViewController {
     fileprivate func renderHeader() {
         self.view.addSubview(header)
         header.anchor(top: view.topAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: 150)
+    }
+    
+    //
+    // Render login form
+    //
+    fileprivate func renderLoginForm() {
+        let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        
+        self.view.addSubview(stackView)
+        stackView.anchor(top: header.bottomAnchor, bottom: nil, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 40, paddingBottom: 0, paddingLeft: 20, paddingRight: 20, width: nil, height: 140)
     }
 }
