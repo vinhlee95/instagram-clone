@@ -73,6 +73,7 @@ class UserProfileHeader: UICollectionViewCell {
     var user: User? {
         didSet {
             setProfileImage()
+            usernameLabel.text = user?.name
         }
     }
     
