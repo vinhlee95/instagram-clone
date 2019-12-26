@@ -131,7 +131,14 @@ class SignupController: UIViewController {
             
             // Upload profile image
             self.uploadImage(uploadData) { (profileImageUrl) in
-                self.saveUserData(user, profileImageUrl)
+                self.saveUserData(user, profileImageUrl, completion: {
+                    // Setup view controller
+                    let mainTabBarController = UIApplication.shared.windows.first!.rootViewController as! MainTabBarController
+                    mainTabBarController.setupViewController()
+                    
+                    // Go to user profile view
+                    self.dismiss(animated: true, completion: nil)
+                })
             }
         }
     }
@@ -215,7 +222,6 @@ class SignupController: UIViewController {
                     print("Error in getting profile image download url", error)
                 }
                 
-                print("Upload profile picture success", url)
                 guard let profileImageUrl = url?.absoluteString else {return}
                 
                 completion(profileImageUrl)
@@ -223,7 +229,7 @@ class SignupController: UIViewController {
         }
     }
     
-    func saveUserData(_ user: Any, _ profileImageUrl: String) {
+    func saveUserData(_ user: Any, _ profileImageUrl: String, completion: @escaping () -> Void) {
         let values = ["username": usernameTextField.text ?? "", "avatar_url": profileImageUrl] as [String : Any]
         
         Database.database().reference().child("users").child((user as AnyObject).uid).setValue(values)
@@ -235,6 +241,7 @@ class SignupController: UIViewController {
             }
             
             print("Saved user data to the database")
+            completion()
         }
     }
 }

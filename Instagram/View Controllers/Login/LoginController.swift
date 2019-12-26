@@ -92,6 +92,13 @@ class LoginController: UIViewController {
 
             let user = authResult!.user
             print("User logged in: \(user.uid)")
+            
+            // Setup view controller
+            let mainTabBarController = UIApplication.shared.windows.first!.rootViewController as! MainTabBarController
+             mainTabBarController.setupViewController()
+            
+            // Go to user profile view
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
