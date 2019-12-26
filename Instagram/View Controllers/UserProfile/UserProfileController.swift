@@ -35,6 +35,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellId")
+        
         renderLogoutButton()
     }
     
@@ -48,6 +49,12 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: { (_) in
             do {
                 try Auth.auth().signOut()
+                // Preset login view
+                let loginController = LoginController()
+                let navController = UINavigationController(rootViewController: loginController)
+                navController.modalPresentationStyle = .fullScreen
+                self.present(navController, animated: true, completion: nil)
+                
             } catch let error {
                 print("Error in loggin user out", error)
             }
