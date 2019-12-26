@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginController: UIViewController {
     
@@ -33,7 +34,7 @@ class LoginController: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.borderStyle = .roundedRect
         textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
-//        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         
         return textfield
     }()
@@ -46,10 +47,25 @@ class LoginController: UIViewController {
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.borderStyle = .roundedRect
         textfield.backgroundColor = UIColor(white: 0, alpha: 0.03)
-//        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         
         return textfield
     }()
+    
+    @objc func handleInputChange() {
+        let isEmailValid = !emailTextField.text!.isEmpty
+        let isPasswordValid = !passwordTextField.text!.isEmpty
+        
+        guard isEmailValid && isPasswordValid else {
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+            return
+        }
+        
+        // Enable the button and add bolder blue background
+        loginButton.isEnabled = true
+        loginButton.backgroundColor = UIColor.rgb(red: 77, green: 166, blue: 255)
+    }
     
     // Sign up button
     let loginButton: UIButton = {
@@ -59,10 +75,33 @@ class LoginController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 4
         
-//        button.addTarget(self, action: #selector(handleSignup), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         return button
     }()
+    
+    @objc func handleLogin() {
+        guard let email = emailTextField.text, !email.isEmpty else { return }
+        guard let password = passwordTextField.text, !password.isEmpty else { return }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+            if let err = error {
+                self.handleError(error: err, title: "Login failed")
+                return
+            }
+
+            let user = authResult!.user
+            print("User logged in: \(user.uid)")
+        }
+    }
+    
+    func handleError(error: Error, title: String) {
+        print("ERROR \(error.localizedDescription)")
+        let alert = UIAlertController(title: title, message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
     
     let signupButton: UIButton = {
         let button = UIButton(type: .system)
