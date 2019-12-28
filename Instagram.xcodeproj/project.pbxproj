@@ -104,7 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				1BBD4CC1238127A4006FAEAD /* Instagram */,
-				1BBD4CC0238127A4006FAEAD /* Products */,
 				AB6BB32557D70CB06E1BBAA4 /* Pods */,
 				D4C1AA396BA1178493A084BC /* Frameworks */,
 			);
@@ -116,6 +115,7 @@
 				1BBD4CBF238127A4006FAEAD /* Instagram.app */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		1BBD4CC1238127A4006FAEAD /* Instagram */ = {
@@ -131,6 +131,7 @@
 				1BBD4CCD238127A4006FAEAD /* LaunchScreen.storyboard */,
 				1BBD4CD0238127A4006FAEAD /* Info.plist */,
 				1B8A6A912399773800BE4617 /* GoogleService-Info.plist */,
+				1BBD4CC0238127A4006FAEAD /* Products */,
 			);
 			path = Instagram;
 			sourceTree = "<group>";

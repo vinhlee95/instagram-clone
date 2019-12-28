@@ -9,9 +9,21 @@
 import UIKit
 import Firebase
 
-class MainTabBarController: UITabBarController {
+class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
+    
+    // Disable selection on Plus navigation item
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let index = viewControllers?.firstIndex(of: viewController)
+        if index == 2 {
+            return false
+        }
+        
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
         
         // Check if user has already logged in
         // if not, show login view
