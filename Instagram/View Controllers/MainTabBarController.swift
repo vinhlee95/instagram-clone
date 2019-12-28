@@ -15,6 +15,16 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let index = viewControllers?.firstIndex(of: viewController)
         if index == 2 {
+            
+            // Present photo selection view
+            let photoCollectionLayout = UICollectionViewFlowLayout()
+            let photoSelectionController = PhotoSelectionController(collectionViewLayout: photoCollectionLayout)
+            
+            // Add navigation controller for top bar (that has Cancel and Next buttons)
+            let navController = UINavigationController(rootViewController: photoSelectionController)
+            
+            present(navController, animated: true, completion: nil)
+            
             return false
         }
         
