@@ -30,17 +30,49 @@ class MainTabBarController: UITabBarController {
     }
     
     func setupViewController() {
-        // Define collection flow layout
-        let layout = UICollectionViewFlowLayout()
-        let userProfileController = UserProfileController(collectionViewLayout: layout)
-        let navController = UINavigationController(rootViewController: userProfileController)
+        // Home and Navigation controller
+        let homeNavController = self.templateNavController(UIImage(named: "home_unselected")!, UIImage(named: "home_selected")!)
         
-        // Set tabBar item icon image and tint color
-        navController.tabBarItem.image = UIImage(named: "profile_unselected")
-        navController.tabBarItem.selectedImage = UIImage(named: "profile_selected")
+        // Search and Navigation controller
+        let searchNavController = self.templateNavController(UIImage(named: "search_unselected")!, UIImage(named: "search_selected")!)
+        
+        // Search and Navigation controller
+        let plusNavController = self.templateNavController(UIImage(named: "plus_unselected")!, UIImage(named: "plus_unselected")!)
+        
+        // Like and Navigation controller
+        let likeNavController = self.templateNavController(UIImage(named: "like_unselected")!, UIImage(named: "like_selected")!)
+        
+        // Profile view controller
+        let userProfileLayout = UICollectionViewFlowLayout()
+        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
+        
+        // Profile navigation controller
+        let userProfileNavController = UINavigationController(rootViewController: userProfileController)
+        userProfileNavController.tabBarItem.image = UIImage(named: "profile_unselected")
+        userProfileNavController.tabBarItem.selectedImage = UIImage(named: "profile_selected")
         tabBar.tintColor = .black
         
-        viewControllers = [navController, UIViewController()]
+        viewControllers = [homeNavController, searchNavController, plusNavController, likeNavController, userProfileNavController]
+        
+        // Add image insets for tabBar items
+        // so that icons are vertically aligned
+        guard let tabBarItems = tabBar.items else {return}
+        
+        for item in tabBarItems {
+            item.imageInsets = UIEdgeInsets(top: 4, left: 0, bottom: -4, right: 0)
+        }
+    }
+    
+    //
+    // Setup nav controller, add selected and unselected icons
+    //
+    fileprivate func templateNavController(_ unselectedImage: UIImage, _ selectedImage: UIImage) -> UINavigationController {
+        let viewController = UIViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.tabBarItem.image = unselectedImage
+        navController.tabBarItem.selectedImage = selectedImage
+        
+        return navController
     }
 }
 
