@@ -17,6 +17,7 @@ class PhotoSelectionController: UICollectionViewController {
     private let cellId = "cellId"
     private let sectionInsets = UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
     private let headerId = "headerId"
+    private var photosLimit = 20
     var images = [UIImage]()
     
     override func viewDidLoad() {
@@ -24,7 +25,7 @@ class PhotoSelectionController: UICollectionViewController {
         collectionView.backgroundColor = .green
         
         renderNavigationButtons()
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(PhotoSelectionCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         fetchPhotos()
     }
@@ -48,15 +49,15 @@ class PhotoSelectionController: UICollectionViewController {
 // Configure cells for photo collection view
 //
 extension PhotoSelectionController {
-    // Number of cells per row
+    // Total amount of items
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Int(cellsPerRow)
+        return images.count
     }
     
-    // Create the cell
+    // Create individual cell
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .red
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! PhotoSelectionCell
+        cell.photoImageView.image = images[indexPath.row]
         
         return cell
     }
@@ -102,14 +103,22 @@ extension PhotoSelectionController {
 }
 
 //
-// Fetch photos from iPhone
+// Fetch photos from image library
 //
 extension PhotoSelectionController {
     fileprivate func fetchPhotos() {
         let options = PHFetchOptions()
-        options.fetchLimit = 10
+        options.fetchLimit = photosLimit
+        
+        // Sort images by creation date
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        options.sortDescriptors = [sortDescriptor]
+        
         let photoAssets = PHAsset.fetchAssets(with: .image, options: options)
         
+        // Iterate through fetched photo assets
+        // Get the image out of each asset by using PHImageManager
+        // Store images in the images array
         photoAssets.enumerateObjects { (asset, count, stop) in
             let targetSize = CGSize(width: 200, height: 200)
             let options = PHImageRequestOptions()
