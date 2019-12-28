@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoSelectionController: UICollectionViewController {
     //
@@ -16,6 +17,7 @@ class PhotoSelectionController: UICollectionViewController {
     private let cellId = "cellId"
     private let sectionInsets = UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
     private let headerId = "headerId"
+    var images = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,7 @@ class PhotoSelectionController: UICollectionViewController {
         renderNavigationButtons()
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        fetchPhotos()
     }
     
     fileprivate func renderNavigationButtons() {
@@ -95,5 +98,31 @@ extension PhotoSelectionController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = view.frame.width
         return CGSize(width: width, height: width)
+    }
+}
+
+//
+// Fetch photos from iPhone
+//
+extension PhotoSelectionController {
+    fileprivate func fetchPhotos() {
+        let options = PHFetchOptions()
+        options.fetchLimit = 10
+        let photoAssets = PHAsset.fetchAssets(with: .image, options: options)
+        
+        photoAssets.enumerateObjects { (asset, count, stop) in
+            let targetSize = CGSize(width: 200, height: 200)
+            let options = PHImageRequestOptions()
+            options.isSynchronous = true
+            
+            PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (image, info) in
+                guard let image = image else {return}
+                self.images.append(image)
+                
+                if(count == photoAssets.count - 1) {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
 }
