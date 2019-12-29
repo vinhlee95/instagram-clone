@@ -17,14 +17,14 @@ class PhotoSelectionController: UICollectionViewController {
     private let cellId = "cellId"
     private let sectionInsets = UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0)
     private let headerId = "headerId"
-    private var photosLimit = 20
+    private var photosLimit = 100
     var images = [UIImage]()
     var selectedImage: UIImage?
     var photoAssets = [PHAsset]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .green
+        collectionView.backgroundColor = .white
         
         renderNavigationButtons()
         collectionView.register(PhotoSelectionCell.self, forCellWithReuseIdentifier: cellId)
