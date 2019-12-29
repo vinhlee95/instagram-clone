@@ -43,7 +43,9 @@ class PhotoSelectionController: UICollectionViewController {
     }
     
     @objc func onNextButtonClick() {
-        dismiss(animated: true, completion: nil)
+        let photoShareController = PhotoShareController()
+        photoShareController.selectedImage = self.selectedImage
+        navigationController?.pushViewController(photoShareController, animated: true)
     }
 }
 

@@ -11,6 +11,7 @@
 		1B06B655239D898500EC4AEB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B06B654239D898500EC4AEB /* MainTabBarController.swift */; };
 		1B4E890623B7581D007BB420 /* PhotoSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */; };
 		1B4E890823B7BE7E007BB420 /* PhotoSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */; };
+		1B4E890C23B945EB007BB420 /* PhotoShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890B23B945EB007BB420 /* PhotoShareController.swift */; };
 		1B7C92B623A4BD080047349B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B523A4BD080047349B /* User.swift */; };
 		1B7C92BA23A50DE30047349B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B923A50DE30047349B /* UserService.swift */; };
 		1B8A6A922399773800BE4617 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B8A6A912399773800BE4617 /* GoogleService-Info.plist */; };
@@ -29,6 +30,7 @@
 		1B06B654239D898500EC4AEB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionController.swift; sourceTree = "<group>"; };
 		1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionCell.swift; sourceTree = "<group>"; };
+		1B4E890B23B945EB007BB420 /* PhotoShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoShareController.swift; sourceTree = "<group>"; };
 		1B7C92B523A4BD080047349B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1B7C92B923A50DE30047349B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		1B8A6A912399773800BE4617 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			children = (
 				1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */,
 				1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */,
+				1B4E890B23B945EB007BB420 /* PhotoShareController.swift */,
 			);
 			path = PhotoSelection;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				1B4E890823B7BE7E007BB420 /* PhotoSelectionCell.swift in Sources */,
 				1B06B655239D898500EC4AEB /* MainTabBarController.swift in Sources */,
 				1BBD4CC5238127A4006FAEAD /* SceneDelegate.swift in Sources */,
+				1B4E890C23B945EB007BB420 /* PhotoShareController.swift in Sources */,
 				1BBD4CD82381CDFB006FAEAD /* Extensions.swift in Sources */,
 				1BA3A9B823B1F25C00443D46 /* LoginController.swift in Sources */,
 			);
