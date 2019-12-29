@@ -19,6 +19,8 @@ class PhotoSelectionController: UICollectionViewController {
     private let headerId = "headerId"
     private var photosLimit = 20
     var images = [UIImage]()
+    var selectedImage: UIImage?
+    var photoAssets = [PHAsset]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,7 @@ class PhotoSelectionController: UICollectionViewController {
         
         renderNavigationButtons()
         collectionView.register(PhotoSelectionCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(UICollectionViewCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(PhotoSelectionCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         fetchPhotos()
     }
     
@@ -90,8 +92,24 @@ extension PhotoSelectionController: UICollectionViewDelegateFlowLayout {
 //
 extension PhotoSelectionController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath)
-        header.backgroundColor = .blue
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! PhotoSelectionCell
+        header.photoImageView.image = self.selectedImage
+        
+        // Render header image with high resolution
+        // e.g higher target sizes
+        
+        // Get index of the selected image
+        guard let selectedImage = self.selectedImage else {return header}
+        let index = images.firstIndex(of: selectedImage)
+        
+        // Get asset with corresponding index
+        guard let selectedIndex = index else {return header}
+        let selectedAsset = photoAssets[selectedIndex]
+        
+        // Request image with higher resolution from the asset
+        PHImageManager.default().requestImage(for: selectedAsset, targetSize: CGSize(width: 600, height: 600), contentMode: .default, options: nil) { (highResImage, hash) in
+            header.photoImageView.image = highResImage
+        }
         
         return header
     }
@@ -107,13 +125,7 @@ extension PhotoSelectionController {
 //
 extension PhotoSelectionController {
     fileprivate func fetchPhotos() {
-        let options = PHFetchOptions()
-        options.fetchLimit = photosLimit
-        
-        // Sort images by creation date
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        options.sortDescriptors = [sortDescriptor]
-        
+        let options = getFetchOptions()
         let photoAssets = PHAsset.fetchAssets(with: .image, options: options)
         
         // Iterate through fetched photo assets
@@ -127,11 +139,36 @@ extension PhotoSelectionController {
             PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (image, info) in
                 guard let image = image else {return}
                 self.images.append(image)
+                self.photoAssets.append(asset)
+                if(self.selectedImage == nil) {
+                    self.selectedImage = image
+                }
                 
                 if(count == photoAssets.count - 1) {
                     self.collectionView.reloadData()
                 }
             }
         }
+    }
+    
+    fileprivate func getFetchOptions() -> PHFetchOptions {
+        let options = PHFetchOptions()
+        options.fetchLimit = photosLimit
+        
+        // Sort images by creation date
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        options.sortDescriptors = [sortDescriptor]
+        
+        return options
+    }
+}
+
+//
+// Select 1 photo
+//
+extension PhotoSelectionController {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.selectedImage = images[indexPath.item]
+        self.collectionView?.reloadData()
     }
 }
