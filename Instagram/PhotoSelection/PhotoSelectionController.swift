@@ -170,5 +170,9 @@ extension PhotoSelectionController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.selectedImage = images[indexPath.item]
         self.collectionView?.reloadData()
+        
+        // Scroll the view to the top when selecting an image
+        let indexPath = IndexPath(row: 0, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
 }
