@@ -19,6 +19,7 @@ class UserProfileController: UICollectionViewController {
     private let headerId = "headerId"
     private let headerHeight: CGFloat = 200
     private let cellPerRow: CGFloat = 3
+    private var posts = [Post]()
     
     //
     // Override methods
@@ -37,9 +38,10 @@ class UserProfileController: UICollectionViewController {
         }
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(UserPhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         renderLogoutButton()
+        fetchPosts()
     }
     
     fileprivate func renderLogoutButton() {
@@ -82,8 +84,10 @@ extension UserProfileController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .red
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserPhotoCell
+        let post = posts[indexPath.item]
+        cell.imageUrl = post.imageUrl
+        
         return cell
     }
 }
@@ -93,7 +97,7 @@ extension UserProfileController {
 //
 extension UserProfileController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 7
+        return posts.count
     }
     
     // Configure size for each cell
@@ -118,5 +122,28 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
     //
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: headerHeight)
+    }
+}
+
+//
+// Fetch posts
+//
+extension UserProfileController {
+    fileprivate func fetchPosts() {
+        guard let userId = Auth.auth().currentUser?.uid else {return}
+        let dbRef = Database.database().reference()
+        
+        dbRef.child("posts").child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let postDictionaries = snapshot.value as? [String: Any] else {return}
+            
+            postDictionaries.forEach { (key, value) in
+                guard let dictionary = value as? [String: Any] else {return}
+                let post = Post(dictionary: dictionary)
+                self.posts.append(post)
+                self.collectionView.reloadData()
+            }
+        }) { (error) in
+            print("Error in getting user posts", error)
+        }
     }
 }
