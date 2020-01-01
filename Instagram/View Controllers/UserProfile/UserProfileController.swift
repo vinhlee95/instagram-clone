@@ -9,13 +9,16 @@
 import UIKit
 import Firebase
 
-class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-    
+class UserProfileController: UICollectionViewController {
     //
     // Variables
     //
     var userService = UserService()
     var user: User?
+    private let cellId = "cellId"
+    private let headerId = "headerId"
+    private let headerHeight: CGFloat = 200
+    private let cellPerRow: CGFloat = 3
     
     //
     // Override methods
@@ -33,8 +36,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             self.collectionView?.reloadData()
         }
         
-        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellId")
+        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         
         renderLogoutButton()
     }
@@ -64,27 +67,39 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         self.present(alert, animated: true, completion: nil)
     }
-    
+
+}
+
+//
+// Cell data source
+//
+extension UserProfileController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
         header.user = self.user
         
         return header
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
         cell.backgroundColor = .red
         return cell
     }
-    
+}
+
+//
+// Collection view flow layout
+//
+extension UserProfileController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 7
     }
     
     // Configure size for each cell
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (view.frame.width - 2) / 3
+        let totalGap = cellPerRow - 1
+        let width = (view.frame.width - totalGap) / cellPerRow
         return CGSize(width: width, height: width)
     }
     
@@ -102,6 +117,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     // Internal methods
     //
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
+        return CGSize(width: view.frame.width, height: headerHeight)
     }
 }
