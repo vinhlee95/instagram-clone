@@ -129,8 +129,11 @@ extension PhotoShareController {
         let userPostRef = Database.database().reference().child("posts").child(userId)
         let ref = userPostRef.childByAutoId()
         
-        let values = ["imageUrl": url, "caption": self.textView.text ?? ""]
-        ref.updateChildValues(values) { (error, dbRef) in
+        let caption = self.textView.text ?? ""
+        let post = Post(imageUrl: url, caption: caption, imageWidth: selectedImage?.size.width , imageHeight: selectedImage?.size.height, creationDate: Date().timeIntervalSince1970)
+        let postDictionary = post.postDictionary
+        
+        ref.updateChildValues(postDictionary) { (error, dbRef) in
             if let error = error {
                 print("Error in saving image url to posts collection on db", error)
                 return
