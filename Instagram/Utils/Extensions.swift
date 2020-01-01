@@ -55,3 +55,27 @@ extension UILabel {
         self.textAlignment = NSTextAlignment.center
     }
 }
+
+//
+// Set image for an image view based on url
+//
+extension UIImageView {
+    func download(from url: String) {
+        guard let url = URL(string: url) else {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error in downloading image", error)
+                return
+            }
+            
+            guard let data = data else {return}
+            let dataImage = UIImage(data: data)
+            
+            DispatchQueue.main.async {
+                guard let image = dataImage else {return}
+                self.image = image
+            }
+        }.resume()
+    }
+}

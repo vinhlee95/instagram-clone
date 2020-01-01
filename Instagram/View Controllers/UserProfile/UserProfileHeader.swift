@@ -131,20 +131,6 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func setProfileImage() {
         guard let profileImageUrl = self.user?.profileImageUrl else {return}
-        guard let url = URL(string: profileImageUrl) else {return}
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                print("Error in setting user profile image", error)
-                return
-            }
-            
-            guard let data = data else {return}
-            let image = UIImage(data: data)
-            
-            DispatchQueue.main.async {
-                self.profileImageView.image = image
-            }
-        }.resume()
+        self.profileImageView.download(from: profileImageUrl)
     }
 }
