@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03DF99DCB49675A8019BF54C /* Pods_Instagram.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48DD1E8E394625BCF3BFBC09 /* Pods_Instagram.framework */; };
+		1B01F6F223BCDDDE00281B27 /* UserPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B01F6F123BCDDDE00281B27 /* UserPhotoCell.swift */; };
 		1B06B655239D898500EC4AEB /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B06B654239D898500EC4AEB /* MainTabBarController.swift */; };
 		1B4E890623B7581D007BB420 /* PhotoSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */; };
 		1B4E890823B7BE7E007BB420 /* PhotoSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B01F6F123BCDDDE00281B27 /* UserPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPhotoCell.swift; sourceTree = "<group>"; };
 		1B06B654239D898500EC4AEB /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionController.swift; sourceTree = "<group>"; };
 		1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionCell.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			children = (
 				1B8CCBB4239EFA7700D13F81 /* UserProfileController.swift */,
 				1B8CCBB723A0448800D13F81 /* UserProfileHeader.swift */,
+				1B01F6F123BCDDDE00281B27 /* UserPhotoCell.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				1BBD4CC7238127A4006FAEAD /* SignupController.swift in Sources */,
 				1B8CCBB823A0448800D13F81 /* UserProfileHeader.swift in Sources */,
 				1B4E890623B7581D007BB420 /* PhotoSelectionController.swift in Sources */,
+				1B01F6F223BCDDDE00281B27 /* UserPhotoCell.swift in Sources */,
 				1B7C92BA23A50DE30047349B /* UserService.swift in Sources */,
 				1BBD4CC3238127A4006FAEAD /* AppDelegate.swift in Sources */,
 				1B4E890E23BC8125007BB420 /* Post.swift in Sources */,
