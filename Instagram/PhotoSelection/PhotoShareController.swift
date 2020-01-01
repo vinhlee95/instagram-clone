@@ -12,7 +12,11 @@ class PhotoShareController: UIViewController {
     //
     // Variables
     //
-    var selectedImage: UIImage?
+    var selectedImage: UIImage? {
+        didSet {
+            self.imageView.image = selectedImage
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

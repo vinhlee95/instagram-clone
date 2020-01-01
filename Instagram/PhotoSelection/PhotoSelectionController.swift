@@ -21,6 +21,7 @@ class PhotoSelectionController: UICollectionViewController {
     var images = [UIImage]()
     var selectedImage: UIImage?
     var photoAssets = [PHAsset]()
+    var header: PhotoSelectionCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +45,7 @@ class PhotoSelectionController: UICollectionViewController {
     
     @objc func onNextButtonClick() {
         let photoShareController = PhotoShareController()
-        photoShareController.selectedImage = self.selectedImage
+        photoShareController.selectedImage = self.header?.photoImageView.image
         navigationController?.pushViewController(photoShareController, animated: true)
     }
 }
@@ -95,6 +96,7 @@ extension PhotoSelectionController: UICollectionViewDelegateFlowLayout {
 extension PhotoSelectionController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! PhotoSelectionCell
+        self.header = header
         header.photoImageView.image = self.selectedImage
         
         // Render header image with high resolution
