@@ -12,6 +12,7 @@
 		1B4E890623B7581D007BB420 /* PhotoSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */; };
 		1B4E890823B7BE7E007BB420 /* PhotoSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */; };
 		1B4E890C23B945EB007BB420 /* PhotoShareController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890B23B945EB007BB420 /* PhotoShareController.swift */; };
+		1B4E890E23BC8125007BB420 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4E890D23BC8125007BB420 /* Post.swift */; };
 		1B7C92B623A4BD080047349B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B523A4BD080047349B /* User.swift */; };
 		1B7C92BA23A50DE30047349B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7C92B923A50DE30047349B /* UserService.swift */; };
 		1B8A6A922399773800BE4617 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B8A6A912399773800BE4617 /* GoogleService-Info.plist */; };
@@ -31,6 +32,7 @@
 		1B4E890523B7581D007BB420 /* PhotoSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionController.swift; sourceTree = "<group>"; };
 		1B4E890723B7BE7E007BB420 /* PhotoSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectionCell.swift; sourceTree = "<group>"; };
 		1B4E890B23B945EB007BB420 /* PhotoShareController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoShareController.swift; sourceTree = "<group>"; };
+		1B4E890D23BC8125007BB420 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		1B7C92B523A4BD080047349B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1B7C92B923A50DE30047349B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		1B8A6A912399773800BE4617 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				1B7C92B523A4BD080047349B /* User.swift */,
+				1B4E890D23BC8125007BB420 /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				1B4E890623B7581D007BB420 /* PhotoSelectionController.swift in Sources */,
 				1B7C92BA23A50DE30047349B /* UserService.swift in Sources */,
 				1BBD4CC3238127A4006FAEAD /* AppDelegate.swift in Sources */,
+				1B4E890E23BC8125007BB420 /* Post.swift in Sources */,
 				1B8CCBB5239EFA7700D13F81 /* UserProfileController.swift in Sources */,
 				1B7C92B623A4BD080047349B /* User.swift in Sources */,
 				1B4E890823B7BE7E007BB420 /* PhotoSelectionCell.swift in Sources */,
