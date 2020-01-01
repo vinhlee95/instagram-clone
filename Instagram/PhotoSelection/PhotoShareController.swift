@@ -130,7 +130,9 @@ extension PhotoShareController {
         let ref = userPostRef.childByAutoId()
         
         let caption = self.textView.text ?? ""
-        let post = Post(imageUrl: url, caption: caption, imageWidth: selectedImage?.size.width , imageHeight: selectedImage?.size.height, creationDate: Date().timeIntervalSince1970)
+        
+        let dictionary = ["imageUrl": url, "caption": caption, "imageWidth": selectedImage?.size.width , "imageHeight": selectedImage?.size.height, "creationDate": Date().timeIntervalSince1970] as! [String: Any]
+        let post = Post(dictionary: dictionary)
         let postDictionary = post.postDictionary
         
         ref.updateChildValues(postDictionary) { (error, dbRef) in
