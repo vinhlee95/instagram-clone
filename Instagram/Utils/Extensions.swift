@@ -60,12 +60,17 @@ extension UILabel {
 // Set image for an image view based on url
 //
 extension UIImageView {
-    func download(from url: String) {
+    func download(from url: String, _ origin: String? = nil) {
         guard let url = URL(string: url) else {return}
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 print("Error in downloading image", error)
+                return
+            }
+            
+            // Prevent async image rendering to change orders
+            if url.absoluteString != origin {
                 return
             }
             

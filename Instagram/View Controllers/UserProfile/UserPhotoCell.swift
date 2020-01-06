@@ -43,6 +43,6 @@ class UserPhotoCell: UICollectionViewCell {
 extension UserPhotoCell {
     fileprivate func renderImageCell() {
         guard let url = self.imageUrl else {return}
-        self.photoImageView.download(from: url)
+        self.photoImageView.download(from: url, self.imageUrl)
     }
 }
