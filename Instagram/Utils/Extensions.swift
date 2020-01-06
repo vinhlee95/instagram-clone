@@ -59,9 +59,17 @@ extension UILabel {
 //
 // Set image for an image view based on url
 //
+var imageCache = [String: UIImage]()
+
 extension UIImageView {
     func download(from url: String, _ origin: String? = nil) {
         guard let url = URL(string: url) else {return}
+        
+        if let cachedImage = imageCache[url.absoluteString] {
+            print("Use cached images")
+            self.image = imageCache[url.absoluteString]
+            return
+        }
         
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
@@ -76,6 +84,8 @@ extension UIImageView {
             
             guard let data = data else {return}
             let dataImage = UIImage(data: data)
+            
+            imageCache[url.absoluteString] = dataImage
             
             DispatchQueue.main.async {
                 guard let image = dataImage else {return}
