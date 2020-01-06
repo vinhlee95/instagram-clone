@@ -131,17 +131,17 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
 extension UserProfileController {
     fileprivate func fetchPosts() {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        let dbRef = Database.database().reference()
+        let dbRef = Database.database().reference().child("posts").child(userId)
         
-        dbRef.child("posts").child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let postDictionaries = snapshot.value as? [String: Any] else {return}
+        dbRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else {return}
+            let post = Post(dictionary: dictionary)
             
-            postDictionaries.forEach { (key, value) in
-                guard let dictionary = value as? [String: Any] else {return}
-                let post = Post(dictionary: dictionary)
-                self.posts.append(post)
-                self.collectionView.reloadData()
-            }
+            // Firebase sort fetched images in ascending orders
+            // thus we need to insert newer post at the BEGINNING of posts array
+            // so that our photo stack will render in descending creation date
+            self.posts.insert(post, at: 0)
+            self.collectionView.reloadData()
         }) { (error) in
             print("Error in getting user posts", error)
         }
