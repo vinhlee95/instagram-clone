@@ -7,19 +7,41 @@
 //
 
 import UIKit
+import Firebase
 
 class HomeController: UICollectionViewController {
     //
     // Variables
     //
     private let cellId = "cellId"
-    var imageCount = 3
+    private var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        fetchPosts()
+    }
+}
+
+//
+// Fetch posts data from Firebase
+//
+extension HomeController {
+    fileprivate func fetchPosts() {
+        guard let userId = Auth.auth().currentUser?.uid else {return}
+        let userPostsRef = Database.database().reference().child("posts").child(userId)
+        
+        userPostsRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else {return}
+            let post = Post(dictionary: dictionary)
+            self.posts.insert(post, at: 0)
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Error in getting posts", error)
+        }
+        
     }
 }
 
@@ -28,12 +50,13 @@ class HomeController: UICollectionViewController {
 //
 extension HomeController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageCount
+        return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomeCell
-        
+        let post = posts[indexPath.item]
+        cell.post = post
         return cell
     }
 }
