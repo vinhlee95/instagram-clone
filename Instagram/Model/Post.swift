@@ -15,18 +15,20 @@ struct Post {
     let imageWidth: CGFloat?
     let imageHeight: CGFloat?
     let creationDate: TimeInterval?
+    let user: User
     
-    init(dictionary: [String: Any]) {
+    init(user: User, dictionary: [String: Any]) {
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         self.caption = dictionary["caption"] as? String ?? ""
         self.imageWidth = dictionary["imageWidth"] as? CGFloat ?? 0
         self.imageHeight = dictionary["imageHeight"] as? CGFloat ?? 0
         self.creationDate = dictionary["creationDate"] as? TimeInterval ?? 0
+        self.user = user
     }
 }
 
 extension Post {
     var postDictionary: [String: Any] {
-        return ["imageUrl": imageUrl, "caption": caption, "imageWidth": imageWidth, "imageHeight": imageHeight, "creationDate": creationDate]
+        return ["imageUrl": imageUrl, "caption": caption, "imageWidth": imageWidth, "imageHeight": imageHeight, "creationDate": creationDate, "user": user]
     }
 }

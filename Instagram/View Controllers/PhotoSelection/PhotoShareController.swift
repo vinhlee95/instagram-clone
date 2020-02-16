@@ -132,7 +132,8 @@ extension PhotoShareController {
         let caption = self.textView.text ?? ""
         
         let dictionary = ["imageUrl": url, "caption": caption, "imageWidth": selectedImage?.size.width , "imageHeight": selectedImage?.size.height, "creationDate": Date().timeIntervalSince1970] as! [String: Any]
-        let post = Post(dictionary: dictionary)
+        let dummyUser = User(name: "Vinh Le", profileImageUrl: "https://google.com")
+        let post = Post(user: dummyUser, dictionary: dictionary)
         let postDictionary = post.postDictionary
         
         ref.updateChildValues(postDictionary) { (error, dbRef) in

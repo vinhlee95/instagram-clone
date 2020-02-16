@@ -13,6 +13,8 @@ class HomeController: UICollectionViewController {
     //
     // Variables
     //
+    var userService = UserService()
+    var user: User?
     private let cellId = "cellId"
     private var posts = [Post]()
     
@@ -33,9 +35,14 @@ extension HomeController {
         guard let userId = Auth.auth().currentUser?.uid else {return}
         let userPostsRef = Database.database().reference().child("posts").child(userId)
         
+        userService.fetchUser(userId) { (user, error) in
+            self.user = user
+        }
+        
         userPostsRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: Any] else {return}
-            let post = Post(dictionary: dictionary)
+            guard let user = self.user else {return}
+            let post = Post(user: user, dictionary: dictionary)
             self.posts.insert(post, at: 0)
             self.collectionView.reloadData()
         }) { (error) in

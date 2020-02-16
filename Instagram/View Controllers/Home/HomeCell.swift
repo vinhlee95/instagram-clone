@@ -12,6 +12,7 @@ class HomeCell: UICollectionViewCell {
     var post: Post? {
         didSet {
             self.renderPostDetails()
+            usernameLabelView.text = post?.user.name
         }
     }
     
@@ -28,11 +29,6 @@ class HomeCell: UICollectionViewCell {
         iv.clipsToBounds = true
         iv.backgroundColor = .blue
         return iv
-    }()
-    
-    let usernameView: UITextView = {
-        let uv = UITextView()
-        return uv
     }()
     
     let usernameLabelView: UILabel = {
