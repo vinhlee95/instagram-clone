@@ -49,6 +49,27 @@ class HomeCell: UICollectionViewCell {
         return button
     }()
     
+    let likeButton: UIButton = {
+        let button = UIButton(type: .system)
+        var image = UIImage(named: "like_unselected")?.withRenderingMode(.alwaysOriginal)
+        button.setImage(image, for: .normal)
+        return button
+    }()
+    
+    let commentButton: UIButton = {
+        let button = UIButton(type: .system)
+        var image = UIImage(named: "comment")?.withRenderingMode(.alwaysOriginal)
+        button.setImage(image, for: .normal)
+        return button
+    }()
+    
+    let sendButton: UIButton = {
+        let button = UIButton(type: .system)
+        var image = UIImage(named: "send2")?.withRenderingMode(.alwaysOriginal)
+        button.setImage(image, for: .normal)
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -63,6 +84,9 @@ class HomeCell: UICollectionViewCell {
         anchorUsernameLabel()
         anchorPostPhoto()
         anchorOptionButton()
+        
+        // Render action buttons
+        renderActionButtons()
     }
     
     required init?(coder: NSCoder) {
@@ -85,6 +109,13 @@ class HomeCell: UICollectionViewCell {
     
     fileprivate func anchorOptionButton() {
         optionButton.anchor(top: topAnchor, bottom: photoImageView.topAnchor, left: nil, right: rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 8, width: nil, height: nil)
+    }
+    
+    fileprivate func renderActionButtons() {
+        let stackView = UIStackView(arrangedSubviews: [likeButton, commentButton, sendButton])
+        addSubview(stackView)
+        stackView.distribution = .fillEqually
+        stackView.anchor(top: photoImageView.bottomAnchor, bottom: nil, left: leftAnchor, right: nil, paddingTop: 8, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: 150, height: 50)
     }
 }
 
