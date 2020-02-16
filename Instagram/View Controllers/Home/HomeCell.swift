@@ -79,7 +79,8 @@ class HomeCell: UICollectionViewCell {
     }
     
     fileprivate func anchorPostPhoto() {
-        photoImageView.anchor(top: userprofileImageView.bottomAnchor, bottom: bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 8, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: nil)
+        photoImageView.anchor(top: userprofileImageView.bottomAnchor, bottom: nil, left: leftAnchor, right: rightAnchor, paddingTop: 8, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: nil)
+        photoImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
     }
     
     fileprivate func anchorOptionButton() {
