@@ -66,7 +66,6 @@ extension UIImageView {
         guard let url = URL(string: url) else {return}
         
         if let cachedImage = imageCache[url.absoluteString] {
-            print("Use cached images")
             self.image = imageCache[url.absoluteString]
             return
         }

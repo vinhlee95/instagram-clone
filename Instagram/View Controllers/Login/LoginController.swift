@@ -143,7 +143,7 @@ class LoginController: UIViewController {
     //
     fileprivate func renderSignupButton() {
         self.view.addSubview(signupButton)
-        signupButton.anchor(top: nil, bottom: view.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingBottom: -10, paddingLeft: 0, paddingRight: 0, width: nil, height: 50)
+        signupButton.anchor(top: nil, bottom: view.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 0, paddingBottom: 10, paddingLeft: 0, paddingRight: 0, width: nil, height: 50)
     }
     
     //
