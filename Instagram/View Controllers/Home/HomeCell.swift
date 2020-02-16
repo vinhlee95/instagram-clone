@@ -69,6 +69,26 @@ class HomeCell: UICollectionViewCell {
         button.setImage(image, for: .normal)
         return button
     }()
+
+    let bookmarkButton: UIButton = {
+        let button = UIButton(type: .system)
+        var image = UIImage(named: "ribbon")?.withRenderingMode(.alwaysOriginal)
+        button.setImage(image, for: .normal)
+        return button
+    }()
+    
+    let captionLabel: UILabel = {
+        let label = UILabel()
+        
+        let attributedText = NSMutableAttributedString(string: "Vinh Le ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: " Here is a very beautiful image", attributes: [.font: UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [.font: UIFont.systemFont(ofSize: 8)]))
+        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 151, green: 149, blue: 149)]))
+        
+        label.attributedText = attributedText
+        label.numberOfLines = 0
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,6 +107,12 @@ class HomeCell: UICollectionViewCell {
         
         // Render action buttons
         renderActionButtons()
+        
+        // Render bookmark button
+        renderBookmarkButton()
+        
+        // Render image caption label
+        renderCaptionLabel()
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +141,17 @@ class HomeCell: UICollectionViewCell {
         let stackView = UIStackView(arrangedSubviews: [likeButton, commentButton, sendButton])
         addSubview(stackView)
         stackView.distribution = .fillEqually
-        stackView.anchor(top: photoImageView.bottomAnchor, bottom: nil, left: leftAnchor, right: nil, paddingTop: 8, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: 150, height: 50)
+        stackView.anchor(top: photoImageView.bottomAnchor, bottom: nil, left: leftAnchor, right: nil, paddingTop: 8, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: 150, height: 40)
+    }
+    
+    fileprivate func renderBookmarkButton() {
+        addSubview(bookmarkButton)
+        bookmarkButton.anchor(top: photoImageView.bottomAnchor, bottom: nil, left: nil, right: rightAnchor, paddingTop: 8, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: 40, height: 40)
+    }
+    
+    fileprivate func renderCaptionLabel() {
+        addSubview(captionLabel)
+        captionLabel.anchor(top: likeButton.bottomAnchor, bottom: bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: nil)
     }
 }
 

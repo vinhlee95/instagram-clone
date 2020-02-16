@@ -68,7 +68,8 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 40 + 8 + 8 // user profile image + paddings
         height += view.frame.width
-        height += 50
+        height += 40 // action buttons
+        height += 60 // image caption label
         
         return CGSize(width: view.frame.width, height: height)
     }
