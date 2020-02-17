@@ -12,7 +12,7 @@ class HomeCell: UICollectionViewCell {
     var post: Post? {
         didSet {
             self.renderPostDetails()
-            usernameLabelView.text = post?.user.name
+            self.renderUserInfo()
         }
     }
     
@@ -27,7 +27,6 @@ class HomeCell: UICollectionViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.backgroundColor = .blue
         return iv
     }()
     
@@ -159,5 +158,18 @@ extension HomeCell {
         guard let post = self.post else {return}
         
         self.photoImageView.download(from: post.imageUrl, post.imageUrl)
+    }
+}
+
+//
+// Render user info
+//
+extension HomeCell {
+    fileprivate func renderUserInfo() {
+        guard let userName = post?.user.name else {return}
+        guard let userProfileImageUrl = post?.user.profileImageUrl else {return}
+        
+        usernameLabelView.text = userName
+        self.userprofileImageView.download(from: userProfileImageUrl, userProfileImageUrl)
     }
 }
