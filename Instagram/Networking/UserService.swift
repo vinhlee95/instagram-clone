@@ -29,7 +29,7 @@ class UserService {
             }
             guard let userDataDictionary = snapshot.value as? [String: String] else {return}
             
-            let fetchedUser = User(name: userDataDictionary["username"] ?? "", profileImageUrl: userDataDictionary["avatar_url"] ?? "")
+            let fetchedUser = User(name: userDataDictionary["username"] ?? "", profileImageUrl: userDataDictionary["avatar_url"] ?? "", id: userId)
             
             completion(fetchedUser, self.errorMessage)
         }

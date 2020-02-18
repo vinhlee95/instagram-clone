@@ -11,8 +11,9 @@ import UIKit
 class HomeCell: UICollectionViewCell {
     var post: Post? {
         didSet {
-            self.renderPostDetails()
+            self.renderPostPhoto()
             self.renderUserInfo()
+            self.renderPostInfo()
         }
     }
     
@@ -74,13 +75,6 @@ class HomeCell: UICollectionViewCell {
     
     let captionLabel: UILabel = {
         let label = UILabel()
-        
-        let attributedText = NSMutableAttributedString(string: "Vinh Le ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSAttributedString(string: " Here is a very beautiful image", attributes: [.font: UIFont.systemFont(ofSize: 14)]))
-        attributedText.append(NSAttributedString(string: "\n\n", attributes: [.font: UIFont.systemFont(ofSize: 8)]))
-        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 151, green: 149, blue: 149)]))
-        
-        label.attributedText = attributedText
         label.numberOfLines = 0
         return label
     }()
@@ -154,7 +148,7 @@ class HomeCell: UICollectionViewCell {
 // Render post details
 //
 extension HomeCell {
-    fileprivate func renderPostDetails() {
+    fileprivate func renderPostPhoto() {
         guard let post = self.post else {return}
         
         self.photoImageView.download(from: post.imageUrl, post.imageUrl)
@@ -171,5 +165,23 @@ extension HomeCell {
         
         usernameLabelView.text = userName
         self.userprofileImageView.download(from: userProfileImageUrl, userProfileImageUrl)
+    }
+}
+
+//
+// Render post caption and time stamp
+//
+extension HomeCell {
+    fileprivate func renderPostInfo() {
+        guard let userName = post?.user.name else {return}
+        guard let captionText = post?.caption else {return}
+        guard let timestamp = post?.creationDate else {return}
+        
+        let attributedText = NSMutableAttributedString(string: userName, attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+        attributedText.append(NSAttributedString(string: " " + captionText, attributes: [.font: UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [.font: UIFont.systemFont(ofSize: 8)]))
+        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 151, green: 149, blue: 149)]))
+        
+        captionLabel.attributedText = attributedText
     }
 }

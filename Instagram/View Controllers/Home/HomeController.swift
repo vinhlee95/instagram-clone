@@ -14,6 +14,7 @@ class HomeController: UICollectionViewController {
     // Variables
     //
     var userService = UserService()
+    var postService = PostService()
     var user: User?
     private let cellId = "cellId"
     private var posts = [Post]()
@@ -23,6 +24,8 @@ class HomeController: UICollectionViewController {
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        
+        // Fetch all posts
         fetchPosts()
     }
 }
@@ -33,22 +36,14 @@ class HomeController: UICollectionViewController {
 extension HomeController {
     fileprivate func fetchPosts() {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        let userPostsRef = Database.database().reference().child("posts").child(userId)
         
         userService.fetchUser(userId) { (user, error) in
-            self.user = user
+            guard let user = user else {return}
+            self.postService.fetchPosts(user: user) { (posts, error) in
+                self.posts = posts
+                self.collectionView.reloadData()
+            }
         }
-        
-        userPostsRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: Any] else {return}
-            guard let user = self.user else {return}
-            let post = Post(user: user, dictionary: dictionary)
-            self.posts.insert(post, at: 0)
-            self.collectionView.reloadData()
-        }) { (error) in
-            print("Error in getting posts", error)
-        }
-        
     }
 }
 
