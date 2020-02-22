@@ -51,7 +51,6 @@ class UserService {
                 let fetchedUser = User(name: userDictionary["username"]!, profileImageUrl: userDictionary["avatar_url"]!, id: key)
                 users.append(fetchedUser)
             }
-            
             completion(users, self.errorMessage)
         }
     }

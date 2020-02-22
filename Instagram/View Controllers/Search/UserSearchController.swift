@@ -15,10 +15,12 @@ class UserSearchController: UICollectionViewController {
     private var cellId = "cellId"
     var userService = UserService()
     private var users = [User]()
+    private var filteredUsers = [User]()
     
-    let searchBar: UISearchBar = {
+    lazy var searchBar: UISearchBar = {
         let sb = UISearchBar()
         sb.placeholder = "Type user name"
+        sb.delegate = self
         return sb
     }()
     
@@ -39,6 +41,10 @@ class UserSearchController: UICollectionViewController {
     fileprivate func fetchUsers() {
         userService.fetchUsers { (users, error) in
             self.users = users
+            self.users.sort { (user, nextUser) -> Bool in
+                return user.name.compare(nextUser.name) == .orderedAscending
+            }
+            self.filteredUsers = self.users
             self.collectionView.reloadData()
         }
     }
@@ -49,12 +55,12 @@ class UserSearchController: UICollectionViewController {
 //
 extension UserSearchController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
+        return filteredUsers.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserResultCell
-        cell.user = self.users[indexPath.item]
+        cell.user = self.filteredUsers[indexPath.item]
         return cell
     }
 }
@@ -68,5 +74,23 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout {
         let height = CGFloat(56)
         
         return CGSize(width: width, height: height)
+    }
+}
+
+//
+// Filter users by search text
+//
+extension UserSearchController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let formattedSearchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if formattedSearchText.isEmpty {
+            self.filteredUsers = self.users
+        } else {
+            self.filteredUsers = self.users.filter({ (user) -> Bool in
+                return user.name.lowercased().contains(formattedSearchText)
+            })
+        }
+        
+        self.collectionView.reloadData()
     }
 }
