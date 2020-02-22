@@ -23,6 +23,7 @@ class UserSearchController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
+        collectionView.alwaysBounceVertical = true // always scroll vertically
         
         let navBar = navigationController?.navigationBar
         navBar?.addSubview(searchBar)
@@ -43,7 +44,6 @@ extension UserSearchController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .red
         return cell
     }
 }
@@ -54,7 +54,7 @@ extension UserSearchController {
 extension UserSearchController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = view.frame.width
-        let height = CGFloat(50)
+        let height = CGFloat(56)
         
         return CGSize(width: width, height: height)
     }
