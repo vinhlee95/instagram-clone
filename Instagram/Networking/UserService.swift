@@ -17,6 +17,7 @@ class UserService {
     // Typealias
     //
     typealias FetchUserResult = (User?, String) -> Void
+    typealias FetchUsersResult = ([User], String) -> Void
     
     //
     // Internal methods
@@ -32,6 +33,26 @@ class UserService {
             let fetchedUser = User(name: userDataDictionary["username"] ?? "", profileImageUrl: userDataDictionary["avatar_url"] ?? "", id: userId)
             
             completion(fetchedUser, self.errorMessage)
+        }
+    }
+    
+    func fetchUsers(completion: @escaping FetchUsersResult) {
+        var users = [User]()
+        
+        Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot, error) in
+            if let error = error {
+                print("Error in fetching all users", error)
+                self.errorMessage = "Error in fetching all users"
+            }
+            
+            guard let userDictionaries = snapshot.value as? [String: Any] else {return}
+            userDictionaries.forEach { (key, value) in
+                guard let userDictionary = value as? [String: String] else {return}
+                let fetchedUser = User(name: userDictionary["username"]!, profileImageUrl: userDictionary["avatar_url"]!, id: key)
+                users.append(fetchedUser)
+            }
+            
+            completion(users, self.errorMessage)
         }
     }
 }

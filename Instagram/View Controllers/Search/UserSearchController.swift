@@ -13,6 +13,8 @@ class UserSearchController: UICollectionViewController {
     // Variables
     //
     private var cellId = "cellId"
+    var userService = UserService()
+    private var users = [User]()
     
     let searchBar: UISearchBar = {
         let sb = UISearchBar()
@@ -24,6 +26,7 @@ class UserSearchController: UICollectionViewController {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true // always scroll vertically
+        self.fetchUsers()
         
         let navBar = navigationController?.navigationBar
         navBar?.addSubview(searchBar)
@@ -32,6 +35,13 @@ class UserSearchController: UICollectionViewController {
         // Register cell
         collectionView.register(UserResultCell.self, forCellWithReuseIdentifier: cellId)
     }
+    
+    fileprivate func fetchUsers() {
+        userService.fetchUsers { (users, error) in
+            self.users = users
+            self.collectionView.reloadData()
+        }
+    }
 }
 
 //
@@ -39,11 +49,12 @@ class UserSearchController: UICollectionViewController {
 //
 extension UserSearchController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return users.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserResultCell
+        cell.user = self.users[indexPath.item]
         return cell
     }
 }

@@ -13,6 +13,11 @@ class UserResultCell: UICollectionViewCell {
     // Variables
     //
     private var profileImageSize = CGFloat(40)
+    var user: User? {
+        didSet {
+            renderUserInfo()
+        }
+    }
     
     let profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -60,5 +65,13 @@ class UserResultCell: UICollectionViewCell {
     fileprivate func renderSeparatorView() {
         addSubview(separatorView)
         separatorView.anchor(top: nil, bottom: bottomAnchor, left: profileNameView.leftAnchor, right: rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, width: nil, height: 0.5)
+    }
+}
+
+extension UserResultCell {
+    fileprivate func renderUserInfo() {
+        guard let user = self.user else {return}
+        profileImageView.download(from: user.profileImageUrl, user.profileImageUrl)
+        profileNameView.text = user.name
     }
 }
