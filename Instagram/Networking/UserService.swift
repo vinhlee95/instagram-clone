@@ -36,6 +36,11 @@ class UserService {
         }
     }
     
+    func getCurrentUserId() -> String? {
+        guard let currentUser = Auth.auth().currentUser else {return ""}
+        return currentUser.uid
+    }
+    
     func fetchUsers(completion: @escaping FetchUsersResult) {
         var users = [User]()
         

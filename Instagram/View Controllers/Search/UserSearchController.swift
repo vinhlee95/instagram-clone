@@ -40,7 +40,10 @@ class UserSearchController: UICollectionViewController {
     
     fileprivate func fetchUsers() {
         userService.fetchUsers { (users, error) in
-            self.users = users
+            let currentUserId = self.userService.getCurrentUserId()
+            self.users = users.filter({ (user) -> Bool in
+                return user.id != currentUserId
+            })
             self.users.sort { (user, nextUser) -> Bool in
                 return user.name.compare(nextUser.name) == .orderedAscending
             }
