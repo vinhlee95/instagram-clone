@@ -16,6 +16,8 @@ class UserProfileController: UICollectionViewController {
     var userService = UserService()
     var postService = PostService()
     var user: User?
+    var userId: String?
+
     private let cellId = "cellId"
     private let headerId = "headerId"
     private let headerHeight: CGFloat = 200
@@ -29,7 +31,7 @@ class UserProfileController: UICollectionViewController {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         
-        guard let userId = Auth.auth().currentUser?.uid else {return}
+        guard let userId = (self.userId ?? Auth.auth().currentUser?.uid) else {return}
         userService.fetchUser(userId) { (user, error) in
             self.user = user
             guard let username = user?.name else {return}
@@ -131,7 +133,7 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
 //
 extension UserProfileController {
     fileprivate func fetchPosts() {
-        guard let userId = Auth.auth().currentUser?.uid else {return}
+        guard let userId = (self.userId ?? Auth.auth().currentUser?.uid) else {return}
         
         userService.fetchUser(userId) { (user, error) in
             guard let user = user else {return}

@@ -28,6 +28,8 @@ class UserSearchController: UICollectionViewController {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         collectionView.alwaysBounceVertical = true // always scroll vertically
+        collectionView.keyboardDismissMode = .onDrag // dismiss keyboard
+        
         self.fetchUsers()
         
         let navBar = navigationController?.navigationBar
@@ -95,5 +97,28 @@ extension UserSearchController: UISearchBarDelegate {
         }
         
         self.collectionView.reloadData()
+    }
+}
+
+//
+// Select a search result
+// Navigate to that user's profile view
+// and handle search bar and keyboard appearance
+//
+extension UserSearchController {
+    override func viewDidAppear(_ animated: Bool) {
+        searchBar.isHidden = false
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Hide the search bar when navigating to user profile view
+        searchBar.isHidden = true
+        // Hide they keyboard
+        searchBar.resignFirstResponder()
+        
+        let user = self.filteredUsers[indexPath.item]
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfileController.userId = user.id
+        navigationController?.pushViewController(userProfileController, animated: true)
     }
 }
