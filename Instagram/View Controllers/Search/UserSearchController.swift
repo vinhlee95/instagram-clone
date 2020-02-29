@@ -12,8 +12,10 @@ class UserSearchController: UICollectionViewController {
     //
     // Variables
     //
-    private var cellId = "cellId"
     var userService = UserService()
+    var user: User?
+    
+    private var cellId = "cellId"
     private var users = [User]()
     private var filteredUsers = [User]()
     
@@ -43,6 +45,7 @@ class UserSearchController: UICollectionViewController {
     fileprivate func fetchUsers() {
         userService.fetchUsers { (users, error) in
             let currentUserId = self.userService.getCurrentUserId()
+            
             self.users = users.filter({ (user) -> Bool in
                 return user.id != currentUserId
             })
@@ -66,6 +69,7 @@ extension UserSearchController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserResultCell
         cell.user = self.filteredUsers[indexPath.item]
+        
         return cell
     }
 }
@@ -119,6 +123,7 @@ extension UserSearchController {
         let user = self.filteredUsers[indexPath.item]
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         userProfileController.userId = user.id
+        
         navigationController?.pushViewController(userProfileController, animated: true)
     }
 }

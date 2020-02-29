@@ -12,26 +12,31 @@ class UserService {
     // Variables
     //
     var errorMessage = ""
+    private var userPath = "users"
+    private var followPath = "following"
     
     //
     // Typealias
     //
     typealias FetchUserResult = (User?, String) -> Void
     typealias FetchUsersResult = ([User], String) -> Void
+    typealias FollowUserResult = (Any, String) -> Void
+    typealias GetFollowingUsersResult = ([String?], String) -> Void
     
     //
     // Internal methods
     //
     func fetchUser(_ userId: String, completion: @escaping FetchUserResult) {
-        Database.database().reference().child("users").child(userId).observeSingleEvent(of: .value) { (snapshot, error) in
+        Database.database().reference().child(userPath).child(userId).observeSingleEvent(of: .value) { (snapshot, error) in
             if let error = error {
                 print("Error in getting user data", error)
                 self.errorMessage = "Error in fetching user data"
             }
-            guard let userDataDictionary = snapshot.value as? [String: String] else {return}
+
+            guard let userDataDictionary = snapshot.value as? [String: Any] else {return}
             
-            let fetchedUser = User(name: userDataDictionary["username"] ?? "", profileImageUrl: userDataDictionary["avatar_url"] ?? "", id: userId)
-            
+            let fetchedUser = User(name: userDataDictionary["username"] as! String, profileImageUrl: userDataDictionary["avatar_url"] as! String, id: userId, following: userDataDictionary["following"] as? [String?] ?? [])
+
             completion(fetchedUser, self.errorMessage)
         }
     }
@@ -44,7 +49,7 @@ class UserService {
     func fetchUsers(completion: @escaping FetchUsersResult) {
         var users = [User]()
         
-        Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot, error) in
+        Database.database().reference().child(userPath).observeSingleEvent(of: .value) { (snapshot, error) in
             if let error = error {
                 print("Error in fetching all users", error)
                 self.errorMessage = "Error in fetching all users"
@@ -57,6 +62,17 @@ class UserService {
                 users.append(fetchedUser)
             }
             completion(users, self.errorMessage)
+        }
+    }
+    
+    func followUser(userId: String, user: User, completion: @escaping FollowUserResult) {
+        guard let currentUserId = getCurrentUserId() else {return}
+        var following = user.following
+        following.append(userId)
+        let values = ["following": following]
+        
+        Database.database().reference().child(userPath).child(currentUserId).updateChildValues(values) { (error, ref) in
+            print("Follow", ref)
         }
     }
 }

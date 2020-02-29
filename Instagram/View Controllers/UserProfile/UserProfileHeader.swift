@@ -9,6 +9,20 @@
 import UIKit
 
 class UserProfileHeader: UICollectionViewCell {
+    private var userService = UserService()
+    
+    var user: User? {
+        didSet {
+            setProfileImage()
+            usernameLabel.text = user?.name
+        }
+    }
+    var ownUser: User? {
+        didSet {
+            setEditButtonTitle()
+        }
+    }
+    
     let profileImageView: UIImageView = {
         let iv = UIImageView()
         return iv
@@ -59,27 +73,22 @@ class UserProfileHeader: UICollectionViewCell {
         return label
     }()
     
-    let editProfileButton: UIButton = {
+    lazy var editProfileOrFollowButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Edit profile", for: .normal)
+        button.addTarget(self, action: #selector(handleEditOrFollow), for: .touchUpInside)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 4
+        
         return button
     }()
-    
-    var user: User? {
-        didSet {
-            setProfileImage()
-            usernameLabel.text = user?.name
-        }
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.contentView.addSubview(profileImageView)
+        self.fetchOwnUser()
         profileImageView.anchor(top: topAnchor, bottom: nil, left: self.leftAnchor, right: nil, paddingTop: 12, paddingBottom: 0, paddingLeft: 12, paddingRight: 0, width: 80, height: 80)
         
         profileImageView.layer.cornerRadius = 80/2
@@ -87,11 +96,18 @@ class UserProfileHeader: UICollectionViewCell {
         renderBottomToolbar()
         renderUsernameLabel()
         renderInfoLabelGroup()
-        renderEditProfileButton()
+        renderEditProfileOrFollowButton()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func fetchOwnUser() {
+        guard let userId = userService.getCurrentUserId() else {return}
+        userService.fetchUser(userId) { (user, error) in
+            self.ownUser = user
+        }
     }
     
     fileprivate func renderBottomToolbar() {
@@ -124,13 +140,63 @@ class UserProfileHeader: UICollectionViewCell {
         stackView.anchor(top: topAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 12, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 50)
     }
     
-    fileprivate func renderEditProfileButton() {
-        addSubview(editProfileButton)
-        editProfileButton.anchor(top: postLabel.bottomAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 35)
+    fileprivate func renderEditProfileOrFollowButton() {
+        addSubview(editProfileOrFollowButton)
+        editProfileOrFollowButton.anchor(top: postLabel.bottomAnchor, bottom: nil, left: profileImageView.rightAnchor, right: rightAnchor, paddingTop: 4, paddingBottom: 0, paddingLeft: 12, paddingRight: 12, width: nil, height: 35)
     }
     
     fileprivate func setProfileImage() {
         guard let profileImageUrl = self.user?.profileImageUrl else {return}
         self.profileImageView.download(from: profileImageUrl)
+    }
+    
+    fileprivate func setEditButtonTitle() {
+        guard let userId = userService.getCurrentUserId() else {return}
+        guard let currentUserId = self.user?.id else {return}
+        
+        if(userId == currentUserId) {
+            editProfileOrFollowButton.setTitle("Edit profile", for: .normal)
+        } else {
+            if self.didFollow(userId: currentUserId) {
+                 editProfileOrFollowButton.setTitle("Unfollow", for: .normal)
+            } else {
+                 editProfileOrFollowButton.setTitle("Follow", for: .normal)
+            }
+        }
+    }
+}
+
+//
+// Handle edit profile or follow
+//
+extension UserProfileHeader {
+    @objc func handleEditOrFollow() {
+        guard let userId = userService.getCurrentUserId() else {return}
+        guard let profileUserId = self.user?.id else {return}
+        
+        if(userId == profileUserId) {
+            print("Edit")
+        } else {
+            handleFollowUser(userId: profileUserId)
+        }
+    }
+    
+    fileprivate func handleFollowUser(userId: String) {
+        if didFollow(userId: userId) {
+            print("Already followed")
+        } else {
+            print("Now following")
+            guard let ownUser = self.ownUser else {return}
+            userService.followUser(userId: userId, user: ownUser) { (user, error) in
+                
+            }
+        }
+    }
+    
+    fileprivate func didFollow(userId: String) -> Bool {
+        guard let followingUsers = self.ownUser?.following else {return false}
+        return followingUsers.contains { (followingUserId) -> Bool in
+            return followingUserId == userId
+        }
     }
 }
