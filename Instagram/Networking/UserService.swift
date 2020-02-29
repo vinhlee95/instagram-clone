@@ -20,9 +20,9 @@ class UserService {
     //
     typealias FetchUserResult = (User?, String) -> Void
     typealias FetchUsersResult = ([User], String) -> Void
-    typealias FollowUserResult = (Any, String) -> Void
-    typealias GetFollowingUsersResult = ([String?], String) -> Void
-    
+    typealias FollowUserResult = () -> Void
+    typealias UnFollowUserResult = () -> Void
+
     //
     // Internal methods
     //
@@ -72,7 +72,30 @@ class UserService {
         let values = ["following": following]
         
         Database.database().reference().child(userPath).child(currentUserId).updateChildValues(values) { (error, ref) in
-            print("Follow", ref)
+            print("Successfully follow user", userId)
+            completion()
+        }
+    }
+    
+    func unfollowUser(userId: String, completion: @escaping UnFollowUserResult) {
+        guard let currentUserId = getCurrentUserId() else {return}
+        let userFollowingRef = Database.database().reference().child(userPath).child(currentUserId).child(followPath)
+        
+        userFollowingRef.observeSingleEvent(of: .value) { (snapshot) in
+            if let followingIds = snapshot.value as? [String] {
+                for i in 0..<followingIds.count {
+                    if followingIds[i] == userId {
+                        userFollowingRef.child("\(i)").removeValue { (error, ref) in
+                            if let error = error {
+                                print("Error in removing following user", userId, error)
+                                return
+                            }
+                            print("Successfully unfollow user", userId)
+                            completion()
+                        }
+                    }
+                }
+            }
         }
     }
 }

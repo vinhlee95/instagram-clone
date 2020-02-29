@@ -183,12 +183,20 @@ extension UserProfileHeader {
     
     fileprivate func handleFollowUser(userId: String) {
         if didFollow(userId: userId) {
-            print("Already followed")
+            userService.unfollowUser(userId: userId) { () in
+                self.editProfileOrFollowButton.setTitle("Follow", for: .normal)
+                // Update own user's following list
+                guard let previousFollowing = self.ownUser?.following else {return}
+                self.ownUser?.following = previousFollowing.filter({ (followingId) -> Bool in
+                    return followingId != userId
+                })
+            }
         } else {
-            print("Now following")
             guard let ownUser = self.ownUser else {return}
-            userService.followUser(userId: userId, user: ownUser) { (user, error) in
-                
+            userService.followUser(userId: userId, user: ownUser) { () in
+                self.editProfileOrFollowButton.setTitle("Unfollow", for: .normal)
+                // Update own user's following list
+                self.ownUser?.following.append(userId)
             }
         }
     }
