@@ -65,7 +65,9 @@ extension UIImageView {
     func download(from url: String, _ origin: String? = nil) {
         guard let url = URL(string: url) else {return}
         
-        if let cachedImage = imageCache[url.absoluteString] {
+        self.image = nil
+        
+        if imageCache[url.absoluteString] != nil {
             self.image = imageCache[url.absoluteString]
             return
         }
