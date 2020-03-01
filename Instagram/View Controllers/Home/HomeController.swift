@@ -58,7 +58,6 @@ extension HomeController {
     fileprivate func fetchUserPosts(user: User) {
         self.postService.fetchPostsByUser(user: user) { (posts) in
             posts.forEach { (post) in
-                print("Append post", post.creationDate?.description)
                 self.posts.append(post)
             }
             self.collectionView.reloadData()
