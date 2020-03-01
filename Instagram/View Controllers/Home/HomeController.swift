@@ -18,6 +18,7 @@ class HomeController: UICollectionViewController {
     var user: User?
     private let cellId = "cellId"
     private var posts = [Post]()
+    private var users = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,24 +26,42 @@ class HomeController: UICollectionViewController {
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
         
-        // Fetch all posts
         fetchPosts()
     }
 }
 
 //
 // Fetch posts data from Firebase
+// Posts include own user and following users's
 //
 extension HomeController {
     fileprivate func fetchPosts() {
         guard let userId = Auth.auth().currentUser?.uid else {return}
-        
-        userService.fetchUser(userId) { (user, error) in
+        userService.fetchUser(userId) { (user) in
             guard let user = user else {return}
-            self.postService.fetchPosts(user: user) { (posts, error) in
-                self.posts = posts
-                self.collectionView.reloadData()
+            
+            // Fetch own user's posts
+            self.fetchUserPosts(user: user)
+            
+            
+            // Fetch following users's posts
+            user.following.forEach {(followingId) in
+                guard let followingId = followingId else {return}
+                self.userService.fetchUser(followingId) { (user) in
+                    guard let followingUser = user else {return}
+                    self.fetchUserPosts(user: followingUser)
+                }
             }
+        }
+    }
+    
+    fileprivate func fetchUserPosts(user: User) {
+        self.postService.fetchPostsByUser(user: user) { (posts) in
+            posts.forEach { (post) in
+                print("Append post", post.creationDate?.description)
+                self.posts.append(post)
+            }
+            self.collectionView.reloadData()
         }
     }
 }

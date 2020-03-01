@@ -18,8 +18,8 @@ class UserService {
     //
     // Typealias
     //
-    typealias FetchUserResult = (User?, String) -> Void
-    typealias FetchUsersResult = ([User], String) -> Void
+    typealias FetchUserResult = (User?) -> Void
+    typealias FetchUsersResult = ([User], String?) -> Void
     typealias FollowUserResult = () -> Void
     typealias UnFollowUserResult = () -> Void
 
@@ -31,13 +31,14 @@ class UserService {
             if let error = error {
                 print("Error in getting user data", error)
                 self.errorMessage = "Error in fetching user data"
+                return
             }
 
             guard let userDataDictionary = snapshot.value as? [String: Any] else {return}
             
             let fetchedUser = User(name: userDataDictionary["username"] as! String, profileImageUrl: userDataDictionary["avatar_url"] as! String, id: userId, following: userDataDictionary["following"] as? [String?] ?? [])
 
-            completion(fetchedUser, self.errorMessage)
+            completion(fetchedUser)
         }
     }
     
@@ -80,9 +81,9 @@ class UserService {
     func unfollowUser(userId: String, completion: @escaping UnFollowUserResult) {
         guard let currentUserId = getCurrentUserId() else {return}
         let userFollowingRef = Database.database().reference().child(userPath).child(currentUserId).child(followPath)
-        
+
         userFollowingRef.observeSingleEvent(of: .value) { (snapshot) in
-            if let followingIds = snapshot.value as? [String] {
+            if let followingIds = snapshot.value as? [String?] {
                 for i in 0..<followingIds.count {
                     if followingIds[i] == userId {
                         userFollowingRef.child("\(i)").removeValue { (error, ref) in

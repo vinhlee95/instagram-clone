@@ -29,6 +29,6 @@ struct Post {
 
 extension Post {
     var postDictionary: [String: Any] {
-        return ["imageUrl": imageUrl, "caption": caption, "imageWidth": imageWidth, "imageHeight": imageHeight, "creationDate": creationDate, "user": user]
+        return ["imageUrl": imageUrl, "caption": caption, "imageWidth": imageWidth, "imageHeight": imageHeight, "creationDate": creationDate]
     }
 }

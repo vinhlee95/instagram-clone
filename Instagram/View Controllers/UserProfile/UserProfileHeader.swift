@@ -105,7 +105,7 @@ class UserProfileHeader: UICollectionViewCell {
     
     fileprivate func fetchOwnUser() {
         guard let userId = userService.getCurrentUserId() else {return}
-        userService.fetchUser(userId) { (user, error) in
+        userService.fetchUser(userId) { (user) in
             self.ownUser = user
         }
     }

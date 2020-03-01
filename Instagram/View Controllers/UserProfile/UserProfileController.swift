@@ -32,7 +32,7 @@ class UserProfileController: UICollectionViewController {
         collectionView.backgroundColor = .white
         
         guard let userId = (self.userId ?? Auth.auth().currentUser?.uid) else {return}
-        userService.fetchUser(userId) { (user, error) in
+        userService.fetchUser(userId) { (user) in
             self.user = user
             guard let username = user?.name else {return}
             
@@ -135,9 +135,9 @@ extension UserProfileController {
     fileprivate func fetchPosts() {
         guard let userId = (self.userId ?? Auth.auth().currentUser?.uid) else {return}
         
-        userService.fetchUser(userId) { (user, error) in
+        userService.fetchUser(userId) { (user) in
             guard let user = user else {return}
-            self.postService.fetchPosts(user: user) { (posts, error) in
+            self.postService.fetchPosts(user: user) { (posts) in
                 self.posts = posts
                 self.collectionView.reloadData()
             }

@@ -9,16 +9,11 @@
 import Firebase
 
 class PostService {
-    //
-    // Variables
-    //
-    var errorMessage = ""
-    var posts = [Post]()
     
     //
     // Typealias
     //
-    typealias FetchPostResult = ([Post], String) -> Void
+    typealias FetchPostResult = ([Post]) -> Void
     
     //
     // Internal methods
@@ -26,13 +21,32 @@ class PostService {
     func fetchPosts(user: User, completion: @escaping FetchPostResult) {
         guard let userId = user.id else {return}
         let userPostsRef = Database.database().reference().child("posts").child(userId)
+        var posts = [Post]()
+        
         userPostsRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: Any] else {return}
             let post = Post(user: user, dictionary: dictionary)
-            self.posts.insert(post, at: 0)
-            completion(self.posts, self.errorMessage)
+            posts.insert(post, at: 0)
+            completion(posts)
         }) { (error) in
             print("Error in getting posts", error)
+        }
+    }
+    
+    
+    func fetchPostsByUser(user: User, completion: @escaping FetchPostResult) {
+        guard let userId = user.id else {return}
+        let userPostsRef = Database.database().reference().child("posts").child(userId)
+        var posts = [Post]()
+        
+        userPostsRef.observeSingleEvent(of: .value) { (snapshot) in
+            guard let dictionaries = snapshot.value as? [String: Any] else {return}
+            dictionaries.forEach { (key, value) in
+                guard let dictionary = value as? [String: Any] else {return}
+                let post = Post(user: user, dictionary: dictionary)
+                posts.append(post)
+            }
+            completion(posts)
         }
     }
 }
