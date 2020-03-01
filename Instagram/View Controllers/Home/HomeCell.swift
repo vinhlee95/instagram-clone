@@ -160,8 +160,8 @@ extension HomeCell {
 //
 extension HomeCell {
     fileprivate func renderUserInfo() {
-        guard let userName = post?.user.name else {return}
-        guard let userProfileImageUrl = post?.user.profileImageUrl else {return}
+        guard let userName = post?.user?.name else {return}
+        guard let userProfileImageUrl = post?.user?.profileImageUrl else {return}
         
         usernameLabelView.text = userName
         self.userprofileImageView.download(from: userProfileImageUrl, userProfileImageUrl)
@@ -173,7 +173,7 @@ extension HomeCell {
 //
 extension HomeCell {
     fileprivate func renderPostInfo() {
-        guard let userName = post?.user.name else {return}
+        guard let userName = post?.user?.name else {return}
         guard let captionText = post?.caption else {return}
         guard let creationDate = post?.creationDate else {return}
         

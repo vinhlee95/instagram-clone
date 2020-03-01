@@ -9,18 +9,23 @@
 import Firebase
 
 class PostService {
+    //
+    // Variables
+    //
+    private let postPath = "posts"
     
     //
     // Typealias
     //
     typealias FetchPostResult = ([Post]) -> Void
+    typealias CreatePostResult = () -> Void
     
     //
     // Internal methods
     //
     func fetchPosts(user: User, completion: @escaping FetchPostResult) {
         guard let userId = user.id else {return}
-        let userPostsRef = Database.database().reference().child("posts").child(userId)
+        let userPostsRef = Database.database().reference().child(postPath).child(userId)
         var posts = [Post]()
         
         userPostsRef.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
@@ -36,7 +41,7 @@ class PostService {
     
     func fetchPostsByUser(user: User, completion: @escaping FetchPostResult) {
         guard let userId = user.id else {return}
-        let userPostsRef = Database.database().reference().child("posts").child(userId)
+        let userPostsRef = Database.database().reference().child(postPath).child(userId)
         var posts = [Post]()
         
         userPostsRef.observeSingleEvent(of: .value) { (snapshot) in
@@ -47,6 +52,20 @@ class PostService {
                 posts.append(post)
             }
             completion(posts)
+        }
+    }
+    
+    func createPost(userId: String, post: Post, completion: @escaping CreatePostResult) {
+        let userPostRef = Database.database().reference().child(postPath).child(userId)
+        let ref = userPostRef.childByAutoId()
+        ref.updateChildValues(post.postDictionary) { (error, ref) in
+            if let error = error {
+                print("Error in create a new post", error)
+                return
+            }
+            
+            print("Successfully save image url to db")
+            completion()
         }
     }
 }

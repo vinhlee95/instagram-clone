@@ -18,6 +18,7 @@ class PhotoShareController: UIViewController {
             self.imageView.image = selectedImage
         }
     }
+    var postService = PostService()
     static let newPostName = NSNotification.Name.init(rawValue: "newPost")
     
     override func viewDidLoad() {
@@ -82,13 +83,19 @@ class PhotoShareController: UIViewController {
 extension PhotoShareController {
     @objc func onShareClick() {
         uploadImage { (url) in
-            self.saveImageUrl(url, completion: {
+            guard let userId = Auth.auth().currentUser?.uid else {return}
+            let caption = self.textView.text ?? ""
+            
+            let dictionary = ["imageUrl": url, "caption": caption, "imageWidth": self.selectedImage?.size.width , "imageHeight": self.selectedImage?.size.height, "creationDate": Date().timeIntervalSince1970] as! [String: Any]
+            let post = Post(user: nil, dictionary: dictionary)
+            
+            self.postService.createPost(userId: userId, post: post) { () in
                 // Post a notification so that next view controller will
                 // observe and handle data update accordingly
                 NotificationCenter.default.post(name: PhotoShareController.newPostName, object: nil)
                 
                 self.dismiss(animated: true, completion: nil)
-            })
+            }
         }
     }
     
@@ -123,32 +130,6 @@ extension PhotoShareController {
                 
                 completion(url)
             }
-        }
-    }
-    
-    //
-    // Save image url to Firebase database
-    //
-    fileprivate func saveImageUrl(_ url: String, completion: @escaping () -> Void) {
-        guard let userId = Auth.auth().currentUser?.uid else {return}
-        let userPostRef = Database.database().reference().child("posts").child(userId)
-        let ref = userPostRef.childByAutoId()
-        
-        let caption = self.textView.text ?? ""
-        
-        let dictionary = ["imageUrl": url, "caption": caption, "imageWidth": selectedImage?.size.width , "imageHeight": selectedImage?.size.height, "creationDate": Date().timeIntervalSince1970] as! [String: Any]
-        let dummyUser = User(name: "Vinh Le", profileImageUrl: "https://google.com", id: userId)
-        let post = Post(user: dummyUser, dictionary: dictionary)
-        let postDictionary = post.postDictionary
-        
-        ref.updateChildValues(postDictionary) { (error, dbRef) in
-            if let error = error {
-                print("Error in saving image url to posts collection on db", error)
-                return
-            }
-            
-            print("Successfully save image url to db")
-            completion()
         }
     }
 }
