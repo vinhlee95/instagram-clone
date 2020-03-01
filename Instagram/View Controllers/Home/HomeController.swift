@@ -26,7 +26,17 @@ class HomeController: UICollectionViewController {
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
         
+        // Fetch posts
         fetchPosts()
+        
+        // Refreshing posts data
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshPosts), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
+        // Observe new post notification from PhotoShareController
+        // to update the data automatically
+        NotificationCenter.default.addObserver(self, selector: #selector(handleObserveNewPost), name: PhotoShareController.newPostName, object: nil)
     }
 }
 
@@ -43,7 +53,6 @@ extension HomeController {
             // Fetch own user's posts
             self.fetchUserPosts(user: user)
             
-            
             // Fetch following users's posts
             user.following.forEach {(followingId) in
                 guard let followingId = followingId else {return}
@@ -57,6 +66,7 @@ extension HomeController {
     
     fileprivate func fetchUserPosts(user: User) {
         self.postService.fetchPostsByUser(user: user) { (posts) in
+            self.collectionView.refreshControl?.endRefreshing()
             posts.forEach { (post) in
                 self.posts.append(post)
             }
@@ -72,6 +82,22 @@ extension HomeController {
 }
 
 //
+// Data refreshing when
+// * Pulling down from top
+// * New post
+//
+extension HomeController {
+    @objc func handleRefreshPosts() {
+        self.posts.removeAll()
+        fetchPosts()
+    }
+    
+    @objc func handleObserveNewPost() {
+        handleRefreshPosts()
+    }
+}
+
+//
 // Configure cells
 //
 extension HomeController {
@@ -81,8 +107,11 @@ extension HomeController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomeCell
-        let post = posts[indexPath.item]
-        cell.post = post
+        if posts.count > indexPath.item {
+            let post = posts[indexPath.item]
+            cell.post = post
+        }
+        
         return cell
     }
 }

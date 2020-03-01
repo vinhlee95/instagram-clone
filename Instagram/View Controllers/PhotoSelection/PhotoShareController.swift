@@ -18,6 +18,7 @@ class PhotoShareController: UIViewController {
             self.imageView.image = selectedImage
         }
     }
+    static let newPostName = NSNotification.Name.init(rawValue: "newPost")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +83,10 @@ extension PhotoShareController {
     @objc func onShareClick() {
         uploadImage { (url) in
             self.saveImageUrl(url, completion: {
+                // Post a notification so that next view controller will
+                // observe and handle data update accordingly
+                NotificationCenter.default.post(name: PhotoShareController.newPostName, object: nil)
+                
                 self.dismiss(animated: true, completion: nil)
             })
         }
