@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app wants to get access to your photos</string>
+	<string>This app wants to get access to your camera</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -58,7 +58,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Instagram would like to access your photo library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Instagram would like to access your photo library</string>
 </dict>
 </plist>
