@@ -180,7 +180,7 @@ extension HomeCell {
         let attributedText = NSMutableAttributedString(string: userName, attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSAttributedString(string: " " + captionText, attributes: [.font: UIFont.systemFont(ofSize: 14)]))
         attributedText.append(NSAttributedString(string: "\n\n", attributes: [.font: UIFont.systemFont(ofSize: 8)]))
-        attributedText.append(NSAttributedString(string: creationDate.description, attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 151, green: 149, blue: 149)]))
+        attributedText.append(NSAttributedString(string: creationDate.timeAgoDisplay(), attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.rgb(red: 151, green: 149, blue: 149)]))
         
         captionLabel.attributedText = attributedText
     }

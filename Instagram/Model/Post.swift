@@ -14,7 +14,7 @@ struct Post {
     let caption: String
     let imageWidth: CGFloat?
     let imageHeight: CGFloat?
-    let creationDate: Date?
+    let creationDate: Date
     let user: User
     
     init(user: User, dictionary: [String: Any]) {

@@ -60,6 +60,12 @@ extension HomeController {
             posts.forEach { (post) in
                 self.posts.append(post)
             }
+            
+            // Sort posts by creation date
+            self.posts = self.posts.sorted(by: { (post, nextPost) -> Bool in
+                return post.creationDate.compare(nextPost.creationDate) == .orderedDescending
+            })
+            
             self.collectionView.reloadData()
         }
     }
