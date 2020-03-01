@@ -24,7 +24,10 @@ class HomeController: UICollectionViewController {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         collectionView.register(HomeCell.self, forCellWithReuseIdentifier: cellId)
+        
+        // Set up navigation bar
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera3")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleOpenCamera))
         
         // Fetch posts
         fetchPosts()
@@ -37,6 +40,17 @@ class HomeController: UICollectionViewController {
         // Observe new post notification from PhotoShareController
         // to update the data automatically
         NotificationCenter.default.addObserver(self, selector: #selector(handleObserveNewPost), name: PhotoShareController.newPostName, object: nil)
+    }
+}
+
+//
+// Handle Camera
+//
+extension HomeController {
+    @objc func handleOpenCamera() {
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        self.present(cameraController, animated: true, completion: nil)
     }
 }
 
