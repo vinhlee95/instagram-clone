@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class PhotoPreview: UIView {
     let previewImageView: UIImageView = {
@@ -50,6 +51,36 @@ class PhotoPreview: UIView {
     }
     
     @objc func handleSave() {
-        print("Save image")
+        guard let savedImage = previewImageView.image else {return}
+        let library = PHPhotoLibrary.shared()
+        library.performChanges({
+            PHAssetChangeRequest.creationRequestForAsset(from: savedImage)
+        }) { (success, error) in
+            if let error = error {
+                print("Error in saving photo to camera roll", error)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                let successLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 120, height: 40))
+                successLabel.text = "Success"
+                successLabel.textAlignment = .center
+                successLabel.textColor = .white
+                successLabel.backgroundColor = UIColor(white: 0, alpha: 0.3)
+                successLabel.center = self.center
+                self.addSubview(successLabel)
+                successLabel.layer.transform = CATransform3DMakeScale(0, 0, 0)
+                
+                UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseIn, animations: {
+                    successLabel.layer.transform = CATransform3DMakeScale(1, 1, 1)
+                }) { (completed) in
+                    UIView.animate(withDuration: 0.25, delay: 0.75, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+                        successLabel.layer.transform = CATransform3DMakeScale(0.1, 0.1, 0.1)
+                    }) { (completed) in
+                        successLabel.removeFromSuperview()
+                    }
+                }
+            }
+        }
     }
 }
