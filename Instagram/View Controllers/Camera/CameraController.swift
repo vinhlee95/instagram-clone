@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class CameraController: UIViewController {
+class CameraController: UIViewController, UIViewControllerTransitioningDelegate {
     private let output = AVCapturePhotoOutput()
     
     let captureButton: UIButton = {
@@ -21,13 +21,15 @@ class CameraController: UIViewController {
     
     let dismissButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "cancel_shadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "right_arrow_shadow")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        transitioningDelegate = self
         
         // Setup capture session layer first
         // so that following Buttons display above the layer
@@ -39,6 +41,14 @@ class CameraController: UIViewController {
         
         view.addSubview(dismissButton)
         dismissButton.anchor(top: view.topAnchor, bottom: nil, left: nil, right: view.rightAnchor, paddingTop: 48, paddingBottom: 0, paddingLeft: 0, paddingRight: 24, width: nil, height: nil)
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return PushFromLeftAnimator()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return PushFromRightAnimator()
     }
 }
 
