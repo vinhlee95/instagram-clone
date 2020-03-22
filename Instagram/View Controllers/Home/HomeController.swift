@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class HomeController: UICollectionViewController {
+class HomeController: UICollectionViewController, HomeCellDelegate {
     //
     // Variables
     //
@@ -126,7 +126,14 @@ extension HomeController {
             cell.post = post
         }
         
+        cell.delegate = self
+        
         return cell
+    }
+    
+    func didTapComment() {
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewLayout())
+        navigationController?.pushViewController(commentsController, animated: true)
     }
 }
 
