@@ -9,13 +9,13 @@
 import UIKit
 
 protocol HomeCellDelegate {
-   func didTapComment()
+    func didTapComment(post: Post)
 }
 
 class HomeCell: UICollectionViewCell, HomeCellDelegate {
     var delegate: HomeCellDelegate?
-    func didTapComment() {
-        
+    func didTapComment(post: Post) {
+       
     }
     
     var post: Post? {
@@ -154,7 +154,8 @@ class HomeCell: UICollectionViewCell, HomeCellDelegate {
     }
     
     @objc func handleComment() {
-        self.delegate?.didTapComment()
+        guard let post = self.post else {return}
+        self.delegate?.didTapComment(post: post)
     }
 }
 

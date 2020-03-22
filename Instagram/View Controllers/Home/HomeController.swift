@@ -131,8 +131,9 @@ extension HomeController {
         return cell
     }
     
-    func didTapComment() {
+    func didTapComment(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewLayout())
+        commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
     }
 }
