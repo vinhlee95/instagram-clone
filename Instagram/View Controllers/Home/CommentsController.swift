@@ -28,20 +28,28 @@ class CommentsController: UICollectionViewController {
         containerView.removeFromSuperview()
     }
     
-    var containerView: UIView = {
-        let containerView = UIView()
-        containerView.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        
+    let textField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter your comment"
+        return textField
+    }()
+    
+    let sendButton: UIButton = {
         let sendButton = UIButton(type: .system)
         sendButton.setTitle("Send", for: .normal)
         sendButton.addTarget(self, action: #selector(submitComment), for: .touchUpInside)
-        containerView.addSubview(sendButton)
-        sendButton.anchor(top: containerView.topAnchor, bottom: containerView.layoutMarginsGuide.bottomAnchor, left: nil, right: containerView.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 12, width: nil, height: nil)
+        return sendButton
+    }()
+    
+    lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         
-        let textField = UITextField()
-        textField.placeholder = "Enter your comment"
-        containerView.addSubview(textField)
-        textField.anchor(top: containerView.topAnchor, bottom: containerView.layoutMarginsGuide.bottomAnchor, left: containerView.leftAnchor, right: nil, paddingTop: 0, paddingBottom: 0, paddingLeft: 12, paddingRight: 0, width: nil, height: nil)
+        containerView.addSubview(self.sendButton)
+        self.sendButton.anchor(top: containerView.topAnchor, bottom: containerView.layoutMarginsGuide.bottomAnchor, left: nil, right: containerView.rightAnchor, paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 12, width: nil, height: nil)
+        
+        containerView.addSubview(self.textField)
+        self.textField.anchor(top: containerView.topAnchor, bottom: containerView.layoutMarginsGuide.bottomAnchor, left: containerView.leftAnchor, right: nil, paddingTop: 0, paddingBottom: 0, paddingLeft: 12, paddingRight: 0, width: nil, height: nil)
         
         
         return containerView
@@ -58,6 +66,6 @@ class CommentsController: UICollectionViewController {
     }
     
     @objc func submitComment() {
-        print("Submit comment")
+        print("Submit comment", textField.text)
     }
 }
