@@ -10,6 +10,8 @@ import UIKit
 typealias TimeInterval = Double
 
 struct Post {
+    var id: String?
+    
     let imageUrl: String
     let caption: String
     let imageWidth: CGFloat?

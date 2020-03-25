@@ -10,11 +10,14 @@ import UIKit
 
 class CommentsController: UICollectionViewController {
     var post: Post?
+    private var userService = UserService()
+    private var commentService = CommentService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = .white
         navigationItem.title = "Comments"
+        collectionView.keyboardDismissMode = .interactive
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +69,14 @@ class CommentsController: UICollectionViewController {
     }
     
     @objc func submitComment() {
-        print("Submit comment", textField.text)
+        guard let userId = userService.getCurrentUserId() else {return}
+        guard let postId = self.post?.id else {return}
+        
+        let commentDictionary = ["body": textField.text, "userId": userId, "creationDate": Date().timeIntervalSince1970] as [String : Any]
+        let comment = Comment(dictionary: commentDictionary)
+        commentService.createComment(postId: postId, comment: comment) {
+            self.textField.resignFirstResponder()
+            self.textField.text = ""
+        }
     }
 }
