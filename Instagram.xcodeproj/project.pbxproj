@@ -34,6 +34,7 @@
 		1BBD4CCC238127A4006FAEAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BBD4CCB238127A4006FAEAD /* Assets.xcassets */; };
 		1BBD4CCF238127A4006FAEAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BBD4CCD238127A4006FAEAD /* LaunchScreen.storyboard */; };
 		1BBD4CD82381CDFB006FAEAD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBD4CD72381CDFB006FAEAD /* Extensions.swift */; };
+		1BF0C378242C6B32006BAC55 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF0C377242C6B31006BAC55 /* CommentCell.swift */; };
 		1BFDEFE824287BC200372303 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFDEFE724287BC200372303 /* Comment.swift */; };
 		1BFDEFEA24287D7A00372303 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFDEFE924287D7A00372303 /* CommentService.swift */; };
 		5FE4AB59E278BDA7A08DB02F /* libPods-Instagram.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C79AA557BFF29E1F86FE44DF /* libPods-Instagram.a */; };
@@ -69,6 +70,7 @@
 		1BBD4CCE238127A4006FAEAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1BBD4CD0238127A4006FAEAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1BBD4CD72381CDFB006FAEAD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		1BF0C377242C6B31006BAC55 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		1BFDEFE724287BC200372303 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		1BFDEFE924287D7A00372303 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
 		5BC83740493AA7A7C677650B /* Pods-Instagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram.release.xcconfig"; path = "Target Support Files/Pods-Instagram/Pods-Instagram.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				1B8159F423C31A49000B50E8 /* HomeController.swift */,
 				1B8159F623C334A5000B50E8 /* HomeCell.swift */,
 				1B0B229A2426BEB600E3D45F /* CommentsController.swift */,
+				1BF0C377242C6B31006BAC55 /* CommentCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				1B0B229924269EB900E3D45F /* CustomAnimator.swift in Sources */,
 				1B2F2A4123FA536300697208 /* PostService.swift in Sources */,
 				1B7DCA48240BF3D1000CF192 /* CameraController.swift in Sources */,
+				1BF0C378242C6B32006BAC55 /* CommentCell.swift in Sources */,
 				1B2F2A4623FCF1E000697208 /* UserResultCell.swift in Sources */,
 				1B8CCBB5239EFA7700D13F81 /* UserProfileController.swift in Sources */,
 				1B7C92B623A4BD080047349B /* User.swift in Sources */,

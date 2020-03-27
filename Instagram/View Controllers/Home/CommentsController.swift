@@ -12,12 +12,22 @@ class CommentsController: UICollectionViewController {
     var post: Post?
     private var userService = UserService()
     private var commentService = CommentService()
+    private let cellId = "cellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .yellow
         navigationItem.title = "Comments"
-        collectionView.keyboardDismissMode = .interactive
+        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellId, for: indexPath) as! CommentCell
+        return cell
     }
     
     override func viewWillAppear(_ animated: Bool) {
