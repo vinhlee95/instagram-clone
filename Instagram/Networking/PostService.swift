@@ -38,6 +38,33 @@ class PostService {
         }
     }
     
+    func paginatePosts(user: User, cursor: String?, count: UInt, completion: @escaping (_ posts: [Post]) -> Void) {
+        guard let userId = user.id else {return}
+        let userPostsRef = Database.database().reference().child(postPath).child(userId)
+        var posts = [Post]()
+        
+        // Query builder
+        var query = userPostsRef.queryOrderedByKey()
+        if let cursor = cursor {
+            query = query.queryStarting(atValue: cursor)
+        }
+        
+        query.queryLimited(toFirst: count).observeSingleEvent(of: .value) { (snapshot) in
+            guard var allObjects = snapshot.children.allObjects as? [DataSnapshot] else {return}
+            if cursor != nil {
+                allObjects.removeFirst()
+            }
+            
+            allObjects.forEach { (snapshot) in
+                guard let dictionary = snapshot.value as? [String: Any] else {return}
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = snapshot.key
+                posts.append(post)
+            }
+            
+            completion(posts)
+        }
+    }
     
     func fetchPostsByUser(user: User, completion: @escaping FetchPostResult) {
         guard let userId = user.id else {return}

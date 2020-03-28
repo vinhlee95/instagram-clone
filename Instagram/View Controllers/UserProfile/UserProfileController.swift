@@ -17,12 +17,14 @@ class UserProfileController: UICollectionViewController {
     var postService = PostService()
     var user: User?
     var userId: String?
+    var hasPosts = true
 
     private let cellId = "cellId"
     private let headerId = "headerId"
     private let headerHeight: CGFloat = 200
     private let cellPerRow: CGFloat = 3
     private var posts = [Post]()
+    private let count: UInt = 5
     
     //
     // Override methods
@@ -88,6 +90,11 @@ extension UserProfileController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserPhotoCell
+        
+        if(indexPath.item == self.posts.count - 1 && self.hasPosts) {
+            self.fetchPosts()
+        }
+        
         let post = posts[indexPath.item]
         cell.imageUrl = post.imageUrl
         
@@ -134,12 +141,23 @@ extension UserProfileController: UICollectionViewDelegateFlowLayout {
 extension UserProfileController {
     fileprivate func fetchPosts() {
         guard let userId = (self.userId ?? Auth.auth().currentUser?.uid) else {return}
+        var cursor: String?
         
         userService.fetchUser(userId) { (user) in
             guard let user = user else {return}
-            self.postService.fetchPosts(user: user) { (posts) in
-                self.posts = posts
-                self.collectionView.reloadData()
+            if self.posts.count > 0 {
+                cursor = self.posts.last?.id
+            }
+            
+            self.postService.paginatePosts(user: user, cursor: cursor, count: self.count) { (posts) in
+                if posts.count < self.count-1 {
+                    self.hasPosts = false
+                }
+                
+                posts.forEach { (post) in
+                    self.posts.append(post)
+                    self.collectionView.reloadData()
+                }
             }
         }
     }
